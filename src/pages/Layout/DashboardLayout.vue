@@ -11,6 +11,14 @@
         <md-icon>dashboard</md-icon>
         <p>Dashboard</p>
       </sidebar-link>
+      <sidebar-link to="/admin/roles">
+        <md-icon>admin_panel_settings</md-icon>
+        <p>Admin Roles</p>
+      </sidebar-link>
+      <sidebar-link to="/company">
+        <md-icon>group</md-icon>
+        <p>Company Profile</p>
+      </sidebar-link>
       <sidebar-link to="/user">
         <md-icon>person</md-icon>
         <p>User Profile</p>

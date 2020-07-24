@@ -1,7 +1,11 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
-import UserProfile from "@/pages/UserProfile.vue";
+
+import AdminRolesManagement from "@/pages/Admin/AdminRolesManagement.vue";
+import CompanyProfile from "@/pages/CompanyProfile.vue";
+import UserProfile    from "@/pages/UserProfile.vue";
+
 import TableList from "@/pages/TableList.vue";
 import Typography from "@/pages/Typography.vue";
 import Icons from "@/pages/Icons.vue";
@@ -19,6 +23,16 @@ const routes = [
         path: "dashboard",
         name: "Dashboard",
         component: Dashboard
+      },
+      {
+        path: "admin/roles",
+        name: "Admin Roles",
+        component: AdminRolesManagement
+      },
+      {
+        path: "company",
+        name: "Company Profile",
+        component: CompanyProfile
       },
       {
         path: "user",

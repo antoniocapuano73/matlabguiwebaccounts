@@ -2,8 +2,8 @@
   <form>
     <md-card>
       <md-card-header :data-background-color="dataBackgroundColor">
-        <h4 class="title">Edit Profile</h4>
-        <p class="category">Complete your profile</p>
+        <h4 class="title">Edit Role</h4>
+        <p class="category">Complete your role</p>
       </md-card-header>
 
       <md-card-content>
@@ -69,8 +69,7 @@
             </md-field>
           </div>
           <div class="md-layout-item md-size-100 text-right">
-            <md-button class="md-raised md-success">New Profile</md-button>
-            <md-button class="md-raised md-success">Update Profile</md-button>
+            <md-button class="button md-raised md-success">Update Profile</md-button>
           </div>
         </div>
       </md-card-content>
@@ -103,4 +102,9 @@ export default {
   }
 };
 </script>
-<style></style>
+
+<style scoped>
+  .button {
+    width: 150px;
+  }
+</style>
