@@ -57,6 +57,19 @@ export function AdminRoleModel(Id,Name) {
     this.Name = iif(Name,Name,'');
 }
 
+export function copyAdminRoleModel(dstAdminRoleModel,srcAdminRoleModel) {
+    try {
+        if ((dstAdminRoleModel) && (srcAdminRoleModel)) {
+            dstAdminRoleModel.Id   = srcAdminRoleModel.Id;
+            dstAdminRoleModel.Name = srcAdminRoleModel.Name;
+        }
+    }
+    catch (e) {
+        console.log("AccountController function copyAdminRoleModel");
+        console.log(e);
+    }
+}
+
 export function getAdminRoleList(successFunction,errorFunction) {
 
     axios
@@ -168,3 +181,36 @@ export function deleteAdminRole(adminRoleModel,successFunction,errorFunction) {
     }
 }
 
+/*
+    <HttpPost>
+    <Route("admin/roles/update")>
+    <AllowAnonymous>
+    Public Function UpdateRole(<FromBody()> ByVal Role As AdminRoleModel) As Boolean
+*/
+
+export function updateAdminRole(adminRoleModel,successFunction,errorFunction) {
+
+    axios
+        .post(accountControllerURL +'/admin/roles/update',adminRoleModel)
+        .then(function (result) {
+            if (typeof successFunction === 'function') {
+                try {
+                    let isUpdatesAdminRole = result.data;
+                    successFunction(isUpdatesAdminRole);
+                }
+                catch (e){
+                    console.log("AccountController.js function addNewRole");
+                    console.log(e);
+                }
+            }
+        })
+        .catch(function (error) {
+            if (typeof errorFunction === 'function')
+                try {
+                    errorFunction(error);
+                }
+                catch (e) {
+                }
+        })
+
+}
