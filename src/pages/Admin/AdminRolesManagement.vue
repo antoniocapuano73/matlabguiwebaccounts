@@ -60,7 +60,7 @@ import {
   } from "@/api/Accounts/AccountController.js"
 
 import AdminRoleEdit from "@/pages/Admin/AdminRoleEdit.vue"; 
-import DialogConfirm from "@/components/DialogConfirm.vue"
+import DialogConfirm from "@/components/Dialogs/DialogConfirm.vue"
 
 export default {
   name: "AdminRolesManagement",
@@ -190,6 +190,9 @@ export default {
 
       // Edit off
       that.showAdminRoleEdit = false;
+
+      // api -> lasciare come ultima funzione
+      that.frmUpdateRoleList();
     },
   }
 };

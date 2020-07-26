@@ -25,17 +25,17 @@ const routes = [
         component: Dashboard
       },
       {
-        path: "admin/roles",
+        path: "accounts/roles",
         name: "Admin Roles",
         component: AdminRolesManagement
       },
       {
-        path: "company",
-        name: "Company Profile",
+        path: "accounts/companies",
+        name: "Companies",
         component: CompanyProfile
       },
       {
-        path: "user",
+        path: "accounts/user",
         name: "User Profile",
         component: UserProfile
       },

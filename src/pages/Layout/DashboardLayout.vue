@@ -11,15 +11,15 @@
         <md-icon>dashboard</md-icon>
         <p>Dashboard</p>
       </sidebar-link>
-      <sidebar-link to="/admin/roles">
+      <sidebar-link to="/accounts/roles">
         <md-icon>admin_panel_settings</md-icon>
         <p>Admin Roles</p>
       </sidebar-link>
-      <sidebar-link to="/company">
+      <sidebar-link to="/accounts/companies">
         <md-icon>group</md-icon>
-        <p>Company Profile</p>
+        <p>Companies</p>
       </sidebar-link>
-      <sidebar-link to="/user">
+      <sidebar-link to="/accounts/user">
         <md-icon>person</md-icon>
         <p>User Profile</p>
       </sidebar-link>
