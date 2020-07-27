@@ -25,7 +25,7 @@
           </md-table-row>
         </md-table>
         <div class="md-layout-item md-size-100 text-right">
-          <md-button class="button md-raised md-success" @click="tableAddNewRole()"><md-icon>add_box</md-icon>New Role</md-button>
+          <md-button class="button md-raised md-success" @click="tableAddAdminRole()"><md-icon>add_box</md-icon>New Role</md-button>
         </div>
       </md-card-content>
     </md-card>
@@ -54,7 +54,7 @@
 
 import {
   getAdminRoleList,
-  addAdminNewRole,
+  addAdminRole,
   deleteAdminRole,
   IsAdminRoleModel,
   } from "@/api/Accounts/AccountController.js"
@@ -110,10 +110,10 @@ export default {
         that.selectedAdminRoleModel = null;
       }
     },
-    tableAddNewRole: function() {
+    tableAddAdminRole: function() {
       let that = this;
 
-      addAdminNewRole(function(adminRoleModel) {
+      addAdminRole(function(adminRoleModel) {
         if (adminRoleModel) {
           that.selectAdminRoleModel(adminRoleModel);
 

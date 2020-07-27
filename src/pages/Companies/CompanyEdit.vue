@@ -21,14 +21,14 @@
           <div class="md-layout-item md-small-size-100 md-size-33">
             <md-field>
               <label>Id</label>
-              <md-input v-model="m_adminRoleModel.Id" disabled></md-input>
+              <md-input v-model="m_item.Id" disabled></md-input>
             </md-field>
           </div>
 
           <div class="md-layout-item md-small-size-100 md-size-33">
             <md-field>
               <label>Name</label>
-              <md-input v-model="m_adminRoleModel.Name" type="text"></md-input>
+              <md-input v-model="m_item.Name" type="text"></md-input>
             </md-field>
           </div>
 
@@ -49,30 +49,29 @@ import {
   copyObj
   } from "@/lib/utility/utility.js"
 
-
 import {
-  AdminRoleModel,
-  IsAdminRoleModel,
-  updateAdminRole
+  CompanyModel,
+  IsCompanyModel,
+  updateCompany
   } from "@/api/Accounts/AccountController.js"
 
 export default {
-  name: "AdminRoleEdit",
+  name: "CompanyEdit",
   data: function() {
     return {
-      m_adminRoleModel: new AdminRoleModel(),
+      m_item: new CompanyModel(),
     };
   },
   props: {
     title: {
       type: String,
-      default: "Edit Role"
+      default: "Edit Company"
     },
     category: {
       type: String,
-      default: "Complete/Modify the role"
+      default: "Complete/Modify the company"
     },
-    adminRoleModel: {
+    item: {
       type: Object,
       default: null,
     },
@@ -88,18 +87,18 @@ export default {
   mounted: function() {
       let that = this;
 
-      copyObj(that.m_adminRoleModel,that.adminRoleModel);
+      copyObj(that.m_item,that.item);
   },
   methods: {
     doActionOk: function () {
         let that = this;
 
-        let success = function (isUpdatesAdminRole) {
+        let success = function (isUpdatedItem) {
           try {
-            if (isUpdatesAdminRole) {
+            if (isUpdatedItem) {
               if (typeof that.onSaved === 'function')
                   if (that.onSaved != null)
-                      that.onSaved(that.m_adminRoleModel);
+                      that.onSaved(that.m_item);
 
             } else {
               // cancel changing
@@ -112,10 +111,10 @@ export default {
         };
 
         let error = function() {
-          copyObj(that.m_adminRoleModel,that.adminRoleModel);
+          copyObj(that.m_item,that.item);
         };
 
-        updateAdminRole(that.m_adminRoleModel,success,error);
+        updateCompany(that.m_item,success,error);
 
     },
     doActionCancel: function () {
@@ -132,10 +131,10 @@ export default {
         },
   },
   watch: { 
-      adminRoleModel: function(nv) {
+      item: function(nv) {
           let that = this;
 
-          copyObj(that.m_adminRoleModel,nv);
+          copyObj(that.m_item,nv);
       },
   }
 };
