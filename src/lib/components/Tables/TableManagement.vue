@@ -41,7 +41,7 @@
       </md-card-content>
     </md-card>
 
-    <TableEdit 
+    <TableEdit
       :title="titleEdit"
       :category="categoryEdit"
       :datasource="datasource"
@@ -277,7 +277,7 @@ export default {
     */
     isItem: function (item) {
         let that = this;
-        
+
         return that.isModel(item);
     },
     selectItem: function(item) {

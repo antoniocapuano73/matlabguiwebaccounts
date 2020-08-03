@@ -41,10 +41,10 @@
       <md-card-content>
 
         <div class="md-layout">
-          <div class="md-layout-item md-small-size-100 md-size-33" v-for="(value,attr,index) in m_item" :key="index">
+          <div class="md-layout-item md-small-size-100 md-size-33" v-for="(value,propertyName,index) in m_item" :key="index">
             <md-field>
-              <label>{{attr}}</label>
-              <md-input v-model="m_item[attr]" :disabled="attr.toLowerCase() === 'id'"></md-input>
+              <label>{{propertyName}}</label>
+              <md-input v-model="m_item[propertyName]" :disabled="propertyName.toLowerCase() === 'id'"></md-input>
             </md-field>
           </div>
 
@@ -62,7 +62,6 @@
 
 <script>
 import {
-  copyObj,
   isFunction,
   } from "@/lib/utility/Utility.js"
 
@@ -113,10 +112,8 @@ export default {
       }
 
       // create an empty model (m_item)
-      that.m_item = that.createModel();
+      that.m_item = that.item;
 
-      // copy into a local model the data of the external model
-      copyObj(that.m_item,that.item);
   },
   methods: {
     /*
@@ -129,6 +126,7 @@ export default {
         try {
           if (that.contextDb) {
             ret = that.contextDb.createModel();
+
           }
         }
         catch(e) {
@@ -188,11 +186,7 @@ export default {
           }
         };
 
-        let error = function() {
-          copyObj(that.m_item,that.item);
-        };
-
-        that.updateModel(that.m_item,success,error);
+        that.updateModel(that.m_item,success);
 
     },
     doActionCancel: function () {
@@ -212,7 +206,10 @@ export default {
       item: function(nv) {
           let that = this;
 
-          copyObj(that.m_item,nv);
+          // refresh data
+          // copyObj(that.m_item,nv);
+
+          that.m_item = nv;
       },
   }
 };

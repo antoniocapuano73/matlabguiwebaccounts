@@ -36,30 +36,11 @@ export function copyObj(obj,src) {
     if (canCopy) {
         for (var attr in src) {
             if (src.hasOwnProperty(attr)) {
-                // if (!IsKey(attr))
                     //console.log(attr);
                     obj[attr] = src[attr];
             }
         }
     }
-}
-
-function IsKey(attr) {
-    let ret = false;
-
-    try {
-        if (attr) {
-            // param: attr
-            attr = attr.toLowerCase();
-
-            // return
-            ret  = (attr !== 'id');
-        }
-    } catch(e) {
-
-    }
-
-    return ret;
 }
 
 export function isFunction(obj) {
