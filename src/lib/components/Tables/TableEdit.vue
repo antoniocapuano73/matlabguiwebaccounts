@@ -3,9 +3,32 @@
         title
         category
         item
+        datasource
 
         onConfirm(item)
         onCancel()
+
+    Technical info:
+      datasource: {
+        type: Object,
+        default: {
+              constructorModel: function() {
+                  return null;
+              },
+              isModel: function(item) {
+                  return false;
+              },
+              updateModel: function(item,success,error) {
+                  success(false);
+              },
+              addModel: function() {
+                  return null;
+              },
+              getListModel: function(success,error) {
+                  success(null);
+              }
+          },
+      },
 -->
 <template>
   <form>
@@ -18,17 +41,10 @@
       <md-card-content>
 
         <div class="md-layout">
-          <div class="md-layout-item md-small-size-100 md-size-33">
+          <div class="md-layout-item md-small-size-100 md-size-33" v-for="(value,attr,index) in m_item" :key="index">
             <md-field>
-              <label>Id</label>
-              <md-input v-model="m_item.Id" disabled></md-input>
-            </md-field>
-          </div>
-
-          <div class="md-layout-item md-small-size-100 md-size-33">
-            <md-field>
-              <label>Name</label>
-              <md-input v-model="m_item.Name" type="text"></md-input>
+              <label>{{attr}}</label>
+              <md-input v-model="m_item[attr]" :disabled="attr.toLowerCase() === 'id'"></md-input>
             </md-field>
           </div>
 
@@ -46,30 +62,34 @@
 
 <script>
 import {
-  copyObj
-  } from "@/lib/utility/utility.js"
+  copyObj,
+  isFunction,
+  } from "@/lib/utility/Utility.js"
 
 import {
-  CompanyModel,
-  IsCompanyModel,
-  updateCompany
-  } from "@/api/Accounts/AccountController.js"
+  Datasource,
+  } from "@/lib/components/Tables/TableUtility.js"
 
 export default {
-  name: "CompanyEdit",
+  name: "TableEdit",
   data: function() {
     return {
-      m_item: new CompanyModel(),
+      m_item: null,
+      contextDb: null,
     };
   },
   props: {
+    datasource: {
+      type: Function,
+      default: null,
+    },
     title: {
       type: String,
-      default: "Edit Company"
+      default: "Edit Table"
     },
     category: {
       type: String,
-      default: "Complete/Modify the company"
+      default: "Complete/Modify the row"
     },
     item: {
       type: Object,
@@ -87,9 +107,67 @@ export default {
   mounted: function() {
       let that = this;
 
+      // creat contextDb
+      if (isFunction(that.datasource)) {
+        that.contextDb = that.datasource();
+      }
+
+      // create an empty model (m_item)
+      that.m_item = that.createModel();
+
+      // copy into a local model the data of the external model
       copyObj(that.m_item,that.item);
   },
   methods: {
+    /*
+        DATABASE INTERFACE
+    */
+    createModel: function() {
+        let that = this;
+        let ret  = null;
+
+        try {
+          if (that.contextDb) {
+            ret = that.contextDb.createModel();
+          }
+        }
+        catch(e) {
+        }
+
+        return ret;
+    },
+    isModel: function(item) {
+        let that = this;
+        let ret  = false;
+
+        try {
+          if (that.contextDb) {
+            ret = that.contextDb.isModel(item);
+          }
+        }
+        catch(e) {
+        }
+
+        return ret;
+    },
+    updateModel: function(item,success,error) {
+        let that = this;
+
+        try {
+          if (that.contextDb) {
+            that.contextDb.updateModel(item,success,error);
+          }
+        }
+        catch(e) {
+          // ERROR FUNCTION
+          try {
+            error();
+          }
+          catch(e) {
+          }
+        }
+
+    },
     doActionOk: function () {
         let that = this;
 
@@ -114,7 +192,7 @@ export default {
           copyObj(that.m_item,that.item);
         };
 
-        updateCompany(that.m_item,success,error);
+        that.updateModel(that.m_item,success,error);
 
     },
     doActionCancel: function () {
@@ -128,7 +206,7 @@ export default {
         catch (e) {
 
         }
-        },
+    },
   },
   watch: { 
       item: function(nv) {

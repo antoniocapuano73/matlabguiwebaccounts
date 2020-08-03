@@ -61,3 +61,15 @@ function IsKey(attr) {
 
     return ret;
 }
+
+export function isFunction(obj) {
+    let ret = false;
+
+    if (obj) {
+        if (typeof obj === 'function') {
+            ret = true;
+        }
+    }
+
+    return ret;
+}

@@ -47,7 +47,7 @@
 <script>
 import {
   copyObj
-  } from "@/lib/utility/utility.js"
+  } from "@/lib/utility/Utility.js"
 
 import {
   CompanyModel,
