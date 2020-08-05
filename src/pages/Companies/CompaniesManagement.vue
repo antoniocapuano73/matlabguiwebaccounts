@@ -1,11 +1,10 @@
 <template>
 
     <TableManagement 
-      title="Companies"
-      category="Modify/Delete/Add Company"
+      :title="titles()"
+      :category="categories()"
       textButtonItemAdd="New Company"
-      titleEdit="Edit Company"
-      categoryEdit="Complete/Modify Company"
+
       :datasource="createDatasource">
     </TableManagement>
 
@@ -52,6 +51,24 @@ export default {
 
   },
   methods: {
+    /*
+      HTML SECTION
+    */
+    titles: function() {
+      return {
+        table: "Companies",
+        edit: "Edit Company",
+        };
+    },
+    categories: function() {
+      return {
+        table: "Modify/Delete/Add Company",
+        edit: "Complete/Modify Company",
+        };
+    },
+    /*
+      DATABASE SECTION
+    */
     createDatasource: function() {
       return new Datasource(CompanyModel,IsCompanyModel,updateCompany,addCompany,deleteCompany,getCompanyList);
     },

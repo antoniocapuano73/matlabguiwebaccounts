@@ -1,29 +1,40 @@
 <!--
     props:
-        title
-        category
+        title = {
+          table: "table title",
+          edit:  "edit title"
+        }
+        category = {
+          table: "table category",
+          edit:  "edit category"
+        }
+
         textButtonItemAdd
 
         titleEdit
         categoryEdit
 
-        fields     -> default values ["Id","Name"]
-        fieldsEdit -> default null
+        fields = {
+          table: ["Id","Name"],
+          edit:  null
+        }
+        
         datasource
 
         onshowedit -> onshowedit(showItemEdit)
+        onitem     -> onitem(item)
 -->
 <template>
   <div class="content">
     <md-card v-show="!showItemEdit">
       <md-card-header data-background-color="green">
-        <h4 class="title"><b>{{title}}</b></h4>
-        <p class="category"><b>{{category}}</b></p>
+        <h4 class="title"><b>{{title.table}}</b></h4>
+        <p class="category"><b>{{category.table}}</b></p>
       </md-card-header>
       <md-card-content>
         <md-table v-model="tableList" table-header-color="green">
           <md-table-row slot="md-table-row" slot-scope="{ item }" @click="selectItem(item)">
-            <md-table-cell :md-label="field" v-for="(field,index) in fields" :key="index">{{ item[field] }}</md-table-cell>
+            <md-table-cell :md-label="field" v-for="(field,index) in fields.table" :key="index">{{ item[field] }}</md-table-cell>
 
             <md-table-cell md-label="">
               <md-button class="md-success" @click="tableItemEdit(item);">
@@ -45,9 +56,9 @@
     </md-card>
 
     <TableEdit
-      :fields="fieldsEdit"
-      :title="titleEdit"
-      :category="categoryEdit"
+      :fields="fields.edit"
+      :title="title.edit"
+      :category="category.edit"
       :datasource="datasource"
       :item="selectedItem"
       :onConfirm="onConfirmEdit"
@@ -58,7 +69,7 @@
     <!-- Modal confirm -->
     <DialogConfirm 
       :show="showDialogConfirmItemDelete"
-      :title="title"
+      :title="title.table"
       :prompt="textDialogConfirmItemDelete"
       :actionOk="dialogOk"
       :actionCancel="dialogCancel">
@@ -98,24 +109,29 @@ export default {
   },
   props: {
     fields: {
-      type: Array,
-      default: function() {return ["Id","Name"]},
-    },
-    fieldsEdit: {
-      type: Array,
-      default: null,
+      type: Object,
+      default: function() { return {
+        table: ["Id","Name"],
+        edit: null,
+        }},
     },
     datasource: {
       type: Function,
       default: null,
     },
     title: {
-      type: String,
-      default: "TableName"
+      type: Object,
+      default: function() { return {
+        table:"TableName",
+        edit: "Edit Table",
+        }},
     },
     category: {
-      type: String,
-      default: "Complete/Modify the table"
+      type: Object,
+      default: function() { return {
+        table: "Complete/Modify the table",
+        edit: "Complete/Modify the row",
+        }},
     },
     textButtonItemAdd: {
       type: String,

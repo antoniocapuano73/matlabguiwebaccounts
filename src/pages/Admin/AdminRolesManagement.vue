@@ -1,11 +1,9 @@
 <template>
 
     <TableManagement 
-      title="Admin Roles"
-      category="Modify/Delete/Add Role"
+      :title="titles()"
+      :category="categories()"
       textButtonItemAdd="New Admin Role"
-      titleEdit="Edit Role"
-      categoryEdit="Complete/Modify Role"
       :datasource="createDatasource">
     </TableManagement>
 
@@ -42,6 +40,24 @@ export default {
 
   },
   methods: {
+    /*
+      HTML SECTION
+    */
+    titles: function() {
+      return {
+        table: "Admin Roles",
+        edit: "Edit Role",
+        };
+    },
+    categories: function() {
+      return {
+        table: "Modify/Delete/Add Role",
+        edit: "Complete/Modify Role",
+        };
+    },
+    /*
+      DATABASE SECTION
+    */
     createDatasource: function() {
       return new Datasource(AdminRoleModel,IsAdminRoleModel,updateAdminRole,addAdminRole,deleteAdminRole,getAdminRoleList);
     },

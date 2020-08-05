@@ -18,15 +18,11 @@
     </md-card>
 
     <TableManagement id="Users"
-      title="Users"
-      category="Modify/Delete/Add User"
+      :title="titles()"
+      :category="categories()"
       textButtonItemAdd="New User"
 
-      titleEdit="Edit User"
-      categoryEdit="Complete/Modify User"
-
       :fields="fields()"
-      :fieldsEdit="fieldsEdit()"
       :datasource="datasource"
       
       :onshowedit="onShowUserEdit">
@@ -177,14 +173,6 @@ export default {
   },
   methods: {
     /*
-      EVENT SECTION
-    */
-    onShowUserEdit: function(status) {
-      let that = this;
-
-      that.showUserEdit = status;
-    },
-    /*
       DATABASE SECTION
     */
     updateCompanyList: function() {
@@ -243,11 +231,34 @@ export default {
 
       });
     },
+    /*
+      HTML SECTION
+    */
     fields: function() {
-      return ["Id","UserName"];
+      return {
+        table: ["Id","UserName","Email"],
+        edit: null,
+        };
     },
-    fieldsEdit: function() {
-      return [];
+    titles: function() {
+      return {
+        table: "Users",
+        edit: "Edit User",
+        };
+    },
+    categories: function() {
+      return {
+        table: "Modify/Delete/Add User",
+        edit: "Complete/Modify User",
+        };
+    },
+    /*
+      EVENT SECTION
+    */
+    onShowUserEdit: function(status) {
+      let that = this;
+
+      that.showUserEdit = status;
     },
     onSelectedCompany: function(idSelectedCompany) {
       let that = this;
