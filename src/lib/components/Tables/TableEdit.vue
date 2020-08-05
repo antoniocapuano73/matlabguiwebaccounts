@@ -3,6 +3,8 @@
         title
         category
         item
+
+        fields
         datasource
 
         onConfirm(item)
@@ -42,7 +44,7 @@
 
         <div class="md-layout">
           <div class="md-layout-item md-small-size-100 md-size-33" v-for="(value,propertyName,index) in m_item" :key="index">
-            <md-field>
+            <md-field v-show="isFieldVisible(propertyName)">
               <label>{{propertyName}}</label>
               <md-input v-model="m_item[propertyName]" :disabled="propertyName.toLowerCase() === 'id'"></md-input>
             </md-field>
@@ -78,6 +80,10 @@ export default {
     };
   },
   props: {
+    fields: {
+      type: Array,
+      default: function() {return []},
+    },
     datasource: {
       type: Function,
       default: null,
@@ -107,15 +113,60 @@ export default {
       let that = this;
 
       // creat contextDb
-      if (isFunction(that.datasource)) {
-        that.contextDb = that.datasource();
-      }
+      that.createContextDb();
 
       // create an empty model (m_item)
       that.m_item = that.item;
 
   },
   methods: {
+    /*
+      DATABASE CONTEXT
+    */
+    createContextDb: function() {
+        let that = this;
+
+        // creat contextDb
+        if (isFunction(that.datasource)) {
+          that.contextDb = that.datasource();
+        }
+
+        // successFunction
+        that.updateList();
+    },
+    /*
+      FIELDS
+    */
+    isFieldVisible: function(propertyName) {
+      let that = this;
+      let ret  = false;
+
+      if (!that.fields)
+        that.fields = [];
+
+      if (that.fields.length > 0) {
+        for (var fieldName of that.fields) {
+          try {
+            let name1 = propertyName.toLowerCase().trim();
+            let name2 = fieldName.toLowerCase().trim();
+
+            if (name1 === name2) {
+              ret = true;
+              break;
+            }
+
+          }
+          catch(e) {
+
+          }
+        }
+      } else {
+        // mostra tutti i campi
+        ret = true;
+      }
+
+      return ret;
+    },
     /*
         DATABASE INTERFACE
     */
@@ -210,6 +261,12 @@ export default {
           // copyObj(that.m_item,nv);
 
           that.m_item = nv;
+      },
+      datasource: function(nv) {
+        let that = this;
+
+        // context Db
+        that.createContextDb();
       },
   }
 };

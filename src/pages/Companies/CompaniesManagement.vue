@@ -3,6 +3,7 @@
     <TableManagement 
       title="Companies"
       category="Modify/Delete/Add Company"
+      textButtonItemAdd="New Company"
       titleEdit="Edit Company"
       categoryEdit="Complete/Modify Company"
       :datasource="createDatasource">

@@ -4,7 +4,7 @@ import Dashboard from "@/pages/Dashboard.vue";
 
 import AdminRolesManagement from "@/pages/Admin/AdminRolesManagement.vue";
 import CompaniesManagement from "@/pages/Companies/CompaniesManagement.vue";
-import UserProfile    from "@/pages/UserProfile.vue";
+import UsersManagement    from "@/pages/Users/UsersManagement.vue";
 
 import TableList from "@/pages/TableList.vue";
 import Typography from "@/pages/Typography.vue";
@@ -37,7 +37,7 @@ const routes = [
       {
         path: "accounts/user",
         name: "User Profile",
-        component: UserProfile
+        component: UsersManagement
       },
       {
         path: "table",

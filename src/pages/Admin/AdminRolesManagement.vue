@@ -3,6 +3,7 @@
     <TableManagement 
       title="Admin Roles"
       category="Modify/Delete/Add Role"
+      textButtonItemAdd="New Admin Role"
       titleEdit="Edit Role"
       categoryEdit="Complete/Modify Role"
       :datasource="createDatasource">

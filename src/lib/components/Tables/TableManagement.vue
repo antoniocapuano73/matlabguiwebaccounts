@@ -7,7 +7,11 @@
         titleEdit
         categoryEdit
 
+        fields     -> default values ["Id","Name"]
+        fieldsEdit -> default null
         datasource
+
+        onshowedit -> onshowedit(showItemEdit)
 -->
 <template>
   <div class="content">
@@ -19,8 +23,7 @@
       <md-card-content>
         <md-table v-model="tableList" table-header-color="green">
           <md-table-row slot="md-table-row" slot-scope="{ item }" @click="selectItem(item)">
-            <md-table-cell md-label="ID"  >{{ item.Id }}</md-table-cell>
-            <md-table-cell md-label="Name">{{ item.Name }}</md-table-cell>
+            <md-table-cell :md-label="field" v-for="(field,index) in fields" :key="index">{{ item[field] }}</md-table-cell>
 
             <md-table-cell md-label="">
               <md-button class="md-success" @click="tableItemEdit(item);">
@@ -42,12 +45,13 @@
     </md-card>
 
     <TableEdit
+      :fields="fieldsEdit"
       :title="titleEdit"
       :category="categoryEdit"
       :datasource="datasource"
       :item="selectedItem"
-      :onConfirm="editOk"
-      :onCancel="editCancel"
+      :onConfirm="onConfirmEdit"
+      :onCancel="onCancelEdit"
       v-show="showItemEdit"> 
     </TableEdit>
 
@@ -74,7 +78,7 @@ import {
   Datasource,
   } from "@/lib/components/Tables/TableUtility.js"
 
-import DialogConfirm from "@/components/Dialogs/DialogConfirm.vue"
+import DialogConfirm from "@/lib/components/Dialogs/DialogConfirm.vue"
 
 export default { 
   /*
@@ -93,6 +97,14 @@ export default {
     TableEdit,
   },
   props: {
+    fields: {
+      type: Array,
+      default: function() {return ["Id","Name"]},
+    },
+    fieldsEdit: {
+      type: Array,
+      default: null,
+    },
     datasource: {
       type: Function,
       default: null,
@@ -117,6 +129,10 @@ export default {
       type: String,
       default: "Complete/Modify the row"
     },
+    onshowedit: {
+      type: Function,
+      default: null
+    },
   },
   data: function() {
     return {
@@ -137,16 +153,43 @@ export default {
   mounted: function() {
       let that = this;
 
-      // creat contextDb
-      if (isFunction(that.datasource)) {
-        that.contextDb = that.datasource();
-      }
-
-      // successFunction
-      that.updateList();
+      // context Db
+      that.createContextDb();
 
   },
   methods: {
+    /*
+      EVENTS SECTION
+    */
+    set_showItemEdit: function(bool) {
+      let that = this;
+
+      try {
+        that.showItemEdit = bool;
+
+        if (that.onshowedit) {
+          if (typeof that.onshowedit === 'function')
+            that.onshowedit(that.showItemEdit);
+        }
+      }
+      catch(e) {
+
+      }
+    },
+    /*
+      DATABASE CONTEXT
+    */
+    createContextDb: function() {
+        let that = this;
+
+        // creat contextDb
+        if (isFunction(that.datasource)) {
+          that.contextDb = that.datasource();
+        }
+
+        // successFunction
+        that.updateList();
+    },
     /*
         DATABASE INTERFACE
     */
@@ -308,7 +351,7 @@ export default {
           that.selectItem(item);
 
           // Edit on
-          that.showItemEdit = true;
+          that.set_showItemEdit(true);
         }
         else {
           // ERR
@@ -319,7 +362,7 @@ export default {
       let that = this;
 
       // Edit on
-      that.showItemEdit = true;
+      that.set_showItemEdit(true);
     },
     tableItemDelete: function(item) {
       let that = this;
@@ -375,25 +418,33 @@ export default {
       that.showDialogConfirmItemDelete = false;
 
     },
-    editOk: function() {
+    onConfirmEdit: function() {
       let that = this;
 
       // Edit off
-      that.showItemEdit = false;
+      that.set_showItemEdit(false);
 
       // api -> lasciare come ultima funzione
       that.updateList();
     },
-    editCancel: function() {
+    onCancelEdit: function() {
       let that = this;
 
       // Edit off
-      that.showItemEdit = false;
+      that.set_showItemEdit(false);
 
       // api -> lasciare come ultima funzione
       that.updateList();
     },
-  }
+  },
+  watch: {
+    datasource: function(nv) {
+      let that = this;
+
+      // context Db
+      that.createContextDb();
+    }
+  },
 };
 </script>
 

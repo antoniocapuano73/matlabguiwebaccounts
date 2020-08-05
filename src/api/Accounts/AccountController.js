@@ -23,6 +23,18 @@ function iif(condition,__true__,__false__) {
 }
 
 /*
+    FILTERUSER SECTION
+
+    Public Class FilterUser
+        Public IdCompany As Integer
+    End Class
+
+*/
+function FilterUser(idCompany) {
+    this.IdCompany = idCompany;
+}
+
+/*
     ADMINROLE SECTION
 
     Public Class AdminRoleModel
@@ -246,12 +258,12 @@ export function CompanyModel(Id,Name) {
     this.Name = iif(Name,Name,'');
 }
 
-export function getCompanyList(successFunction,errorFunction) {
+export function getCompanyList(success,error) {
 
     axios
       .get(accountControllerURL +'/companies/list')
       .then(function (result){
-        if (typeof successFunction === 'function') {
+        if (typeof success === 'function') {
             try {
                 /*
                     array of AdminRoleModel object
@@ -263,7 +275,7 @@ export function getCompanyList(successFunction,errorFunction) {
                         list = result.data;
                 }
 
-                successFunction(list);
+                success(list);
             }
             catch (e){
                 console.log("AccountController.js function getCompanyList");
@@ -271,10 +283,10 @@ export function getCompanyList(successFunction,errorFunction) {
             }
         }
       })
-      .catch(function (error) {
-        if (typeof errorFunction === 'function')
+      .catch(function (e) {
+        if (typeof error === 'function')
             try {
-                errorFunction(error);
+                error(e);
             }
             catch (e){
             }
@@ -384,6 +396,266 @@ export function updateCompany(item,successFunction,errorFunction) {
             if (typeof errorFunction === 'function')
                 try {
                     errorFunction(error);
+                }
+                catch (e) {
+                }
+        })
+
+}
+
+/*
+    USER SECTION
+
+    SELECT TOP 1000 [Id]
+        ,[HasTemporaryPassword]
+        ,[Email]
+        ,[EmailConfirmed]
+        ,[PasswordHash]
+        ,[SecurityStamp]
+        ,[PhoneNumber]
+        ,[PhoneNumberConfirmed]
+        ,[TwoFactorEnabled]
+        ,[LockoutEndDateUtc]
+        ,[LockoutEnabled]
+        ,[AccessFailedCount]
+        ,[UserName]
+        ,[Company_Id]
+        ,[Settings_Id]
+        ,[FirstName]
+        ,[LastName]
+        ,[Note]
+        ,[Image]
+        ,[Role]
+    FROM [Users].[dbo].[AspNetUsers]
+
+*/
+
+export function IsUserModel(userModel) {
+    let ret = false;
+
+    if (userModel) {
+        try {
+            let Id   = userModel.Id;
+            let Name = userModel.UserName.trim();
+
+            if ((Id) && (Name)) {
+                // return
+                ret = true;
+            }
+        } 
+        catch (e) {
+            console.log(e);
+        }
+    }
+
+    return ret;
+}
+
+export function UserModel(Id,UserName) {
+    this.Id       = iif(Id, Id, '');
+    this.UserName = iif(UserName,UserName,'');
+}
+
+export function getUserList(success,error) {
+
+    axios
+      .post(accountControllerURL +'/users/list',null)
+      .then(function (result){
+        if (typeof success === 'function') {
+            try {
+                /*
+                    array of user object
+                */
+                let list = [];
+
+                if (result) {
+                    if (result.data)
+                        list = result.data;
+                }
+
+                success(list);
+            }
+            catch (e){
+                console.log("AccountController.js function getUserList");
+                console.log(e);
+            }
+        }
+      })
+      .catch(function (e) {
+        if (typeof error === 'function')
+            try {
+                error(e);
+            }
+            catch (e){
+            }
+      })
+}
+
+export function getUserListByIdCompany(idCompany,success,error) {
+
+    axios
+      .post(accountControllerURL +'/users/list',new FilterUser(idCompany))
+      .then(function (result){
+        if (typeof success === 'function') {
+            try {
+                /*
+                    array of user object
+                */
+                let list = [];
+
+                if (result) {
+                    if (result.data)
+                        list = result.data;
+                }
+
+                success(list);
+            }
+            catch (e){
+                console.log("AccountController.js function getUserList");
+                console.log(e);
+            }
+        }
+      })
+      .catch(function (e) {
+        if (typeof error === 'function')
+            try {
+                error(e);
+            }
+            catch (e){
+            }
+      })
+}
+
+/*
+    <HttpPost>
+    <Route("user/new")>
+    <AllowAnonymous>
+    Public Function addUser() As Boolean
+*/
+
+export function addUserByIdCompany(idCompany,success,error) {
+
+    axios
+        .post(accountControllerURL +'/users/new',new FilterUser(idCompany))
+        .then(function (result) {
+            if (typeof success === 'function') {
+                try {
+                    let item = result.data;
+                    success(item);
+                }
+                catch (e){
+                    console.log("AccountController.js function addUser");
+                    console.log(e);
+                }
+            }
+        })
+        .catch(function (e) {
+            if (typeof error === 'function')
+                try {
+                    error(e);
+                }
+                catch (e) {
+                }
+        })
+
+}
+
+export function addUser(success,error) {
+
+    axios
+        .post(accountControllerURL +'/users/new')
+        .then(function (result) {
+            if (typeof success === 'function') {
+                try {
+                    let item = result.data;
+                    success(item);
+                }
+                catch (e){
+                    console.log("AccountController.js function addUser");
+                    console.log(e);
+                }
+            }
+        })
+        .catch(function (e) {
+            if (typeof error === 'function')
+                try {
+                    error(e);
+                }
+                catch (e) {
+                }
+        })
+
+}
+
+/*
+    <HttpPost>
+    <Route("users/delete")>
+    <AllowAnonymous>
+*/
+
+export function deleteUser(item,success,error) {
+
+    try {
+        axios
+        .post(accountControllerURL +'/users/delete',item)
+        .then(function (result){
+            if (typeof success === 'function') {
+                try {
+                    let isItemDeleted = result.data;
+                    success(isItemDeleted);
+                }
+                catch (e){
+                    console.log("AccountController.js function deleteUser");
+                    console.log(e);
+                }
+            }
+        })
+        .catch(function (e) {
+            if (typeof error === 'function')
+                try {
+                    error(e);
+                }
+                catch (e){
+                }
+        })
+
+    } catch (e) {
+        if (typeof errorFunction === 'function')
+            try {
+                errorFunction(error);
+            }
+            catch (e) {
+            }
+    }
+}
+
+/*
+    <HttpPost>
+    <Route("companies/update")>
+    <AllowAnonymous>
+    Public Function UpdateRole(<FromBody()> ByVal Role As AdminRoleModel) As Boolean
+*/
+
+export function updateUser(item,success,error) {
+
+    axios
+        .post(accountControllerURL +'/users/update',item)
+        .then(function (result) {
+            if (typeof success === 'function') {
+                try {
+                    let isItemUpdated = result.data;
+                    success(isItemUpdated);
+                }
+                catch (e){
+                    console.log("AccountController.js function updateUser");
+                    console.log(e);
+                }
+            }
+        })
+        .catch(function (e) {
+            if (typeof error === 'function')
+                try {
+                    error(e);
                 }
                 catch (e) {
                 }
