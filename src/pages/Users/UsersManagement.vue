@@ -206,7 +206,7 @@ export default {
         var compareCompany = function(a, b) {
           try {
             var a1 = a.Name.toLowerCase().trim();
-            var b1 = b.onSelectedCompanyName.toLowerCase().trim();
+            var b1 = b.Name.toLowerCase().trim();
 
             if (a1 < b1)
               return -1;
