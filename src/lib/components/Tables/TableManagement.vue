@@ -36,7 +36,7 @@
       <md-card-content>
         <md-table v-model="tableList" table-header-color="green">
           <md-table-row slot="md-table-row" slot-scope="{ item }" @click="selectItem(item)">
-            <md-table-cell :md-label="field" v-for="(field,index) in fields.table" :key="index">{{ item[field] }}</md-table-cell>
+            <md-table-cell :md-label="fieldText(field)" v-for="(field,index) in fields.table" :key="index">{{ item[fieldKey(field)] }}</md-table-cell>
 
             <md-table-cell md-label="">
               <md-button class="md-success" @click="tableItemEdit(item);">
@@ -89,6 +89,7 @@ import {
 import TableEdit from "@/lib/components/Tables/TableEdit.vue";
 import {
   Datasource,
+  key,text,TableField,TableFields,
   } from "@/lib/components/Tables/TableUtility.js"
 
 import DialogConfirm from "@/lib/components/Dialogs/DialogConfirm.vue"
@@ -172,6 +173,15 @@ export default {
 
   },
   methods: {
+    /*
+      HTML TABLE SECTION
+    */
+    fieldKey: function(field) {
+      return key(field);
+    },
+    fieldText: function(field) {
+      return text(field);
+    },
     /*
       EVENTS SECTION
     */

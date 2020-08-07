@@ -59,6 +59,8 @@ import {
 import TableManagement from "@/lib/components/Tables/TableManagement.vue";
 import {
   Datasource,
+  TableField,
+  TableFields,
   } from "@/lib/components/Tables/TableUtility.js"
 
 export default { 
@@ -237,7 +239,14 @@ export default {
     fields: function() {
       return {
         table: ["Id","UserName","Email"],
-        edit: null,
+        edit: new TableFields(
+            new TableField("UserName","User Name"),
+            new TableField("Email"),
+            new TableField("FirstName","First Name"),
+            new TableField("LastName","Last Name"),
+            new TableField("PhoneNumber","Phone Number"),
+            new TableField("Note"),
+          ),
         };
     },
     titles: function() {

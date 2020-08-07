@@ -43,10 +43,10 @@
       <md-card-content>
 
         <div class="md-layout">
-          <div class="md-layout-item md-small-size-100 md-size-33" v-for="(value,propertyName,index) in m_item" :key="index">
-            <md-field v-show="isFieldVisible(propertyName)">
-              <label>{{propertyName}}</label>
-              <md-input v-model="m_item[propertyName]" :disabled="propertyName.toLowerCase() === 'id'"></md-input>
+          <div class="md-layout-item md-small-size-100 md-size-33" v-for="(item,index) in __FIELDS__" :key="index">
+            <md-field>
+              <label>{{fieldText(item)}}</label>
+              <md-input v-model="m_item[fieldKey(item)]"></md-input>
             </md-field>
           </div>
 
@@ -69,6 +69,10 @@ import {
 
 import {
   Datasource,
+  key,text,
+  TableField,
+  TableFields,
+  IsTableFields,
   } from "@/lib/components/Tables/TableUtility.js"
 
 export default {
@@ -119,7 +123,61 @@ export default {
       that.m_item = that.item;
 
   },
+  computed: {
+    /*
+      HTML TABLE SECTION
+    */
+    __FIELDS__: function() {
+      let that = this;
+      let ret  = null;
+
+      let obj    = that.m_item;
+      let fields = that.fields;
+      
+      if (obj) {
+        let FIELDS = null;
+
+        if (!fields) {
+          FIELDS = Object.getOwnPropertyNames(obj);
+        } else {
+
+          if (IsTableFields(fields)) {
+            FIELDS = fields.items;
+          }
+          else
+            FIELDS = fields;
+        }
+
+        /*
+          Filter on existing fields
+        */
+        for (var field of FIELDS) {
+          let propertyName = that.fieldKey(field);
+
+            if (obj.hasOwnProperty(propertyName)) {
+              if (!ret)
+                ret = [];
+
+              ret.push(field);
+            }
+        }
+
+
+      }
+
+      return ret;
+    },
+  },
   methods: {
+    /*
+      HTML TABLE SECTION
+    */
+    fieldKey: function(field) {
+      return key(field);
+    },
+    fieldText: function(field) {
+      return text(field);
+    },
     /*
       DATABASE CONTEXT
     */
@@ -133,39 +191,6 @@ export default {
 
         // successFunction
         that.updateList();
-    },
-    /*
-      FIELDS
-    */
-    isFieldVisible: function(propertyName) {
-      let that = this;
-      let ret  = false;
-
-      if (!that.fields)
-        that.fields = [];
-
-      if (that.fields.length > 0) {
-        for (var fieldName of that.fields) {
-          try {
-            let name1 = propertyName.toLowerCase().trim();
-            let name2 = fieldName.toLowerCase().trim();
-
-            if (name1 === name2) {
-              ret = true;
-              break;
-            }
-
-          }
-          catch(e) {
-
-          }
-        }
-      } else {
-        // mostra tutti i campi
-        ret = true;
-      }
-
-      return ret;
     },
     /*
         DATABASE INTERFACE
