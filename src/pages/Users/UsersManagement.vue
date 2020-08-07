@@ -25,7 +25,7 @@
       :fields="fields()"
       :datasource="datasource"
       
-      :onshowedit="onShowUserEdit">
+      :onShowEdit="onShowUserEdit">
     </TableManagement>
 
   </div>

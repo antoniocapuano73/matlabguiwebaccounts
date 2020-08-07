@@ -21,8 +21,10 @@
         
         datasource
 
-        onshowedit -> onshowedit(showItemEdit)
-        onitem     -> onitem(item)
+        onShowEdit    -> onshowedit(showItemEdit)
+        onItem        -> onitem(item)
+        onConfirmEdit -> onConfirmEdit(item)
+        onCancelEdit
 -->
 <template>
   <div class="content">
@@ -61,8 +63,8 @@
       :category="category.edit"
       :datasource="datasource"
       :item="selectedItem"
-      :onConfirm="onConfirmEdit"
-      :onCancel="onCancelEdit"
+      :onConfirm="internal_onConfirmEdit"
+      :onCancel="internal_onCancelEdit"
       v-show="showItemEdit"> 
     </TableEdit>
 
@@ -137,15 +139,11 @@ export default {
       type: String,
       default: "New Row" 
     },
-    titleEdit: {
-      type: String,
-      default: "Edit Table"
+    onShowEdit: {
+      type: Function,
+      default: null
     },
-    categoryEdit: {
-      type: String,
-      default: "Complete/Modify the row"
-    },
-    onshowedit: {
+    onItem: {
       type: Function,
       default: null
     },
@@ -177,15 +175,64 @@ export default {
     /*
       EVENTS SECTION
     */
-    set_showItemEdit: function(bool) {
+    set_showItemEdit: function(status) {
+      let that = this;
+
+      that.showItemEdit = status;
+      that.raise_onShowEdit(status);
+    },
+    raise_onShowEdit: function(status) {
       let that = this;
 
       try {
-        that.showItemEdit = bool;
+        if (that.onShowEdit) {
+          if (typeof that.onShowEdit === 'function')
+            that.onShowEdit(status);
+        }
+      }
+      catch(e) {
 
-        if (that.onshowedit) {
-          if (typeof that.onshowedit === 'function')
-            that.onshowedit(that.showItemEdit);
+      }
+    },
+    set_selectedItem: function(item) {
+      let that = this;
+
+      that.selectedItem = item;
+      that.raise_onItem(item);
+    },
+    raise_onItem: function(item) {
+      let that = this;
+      
+      try {
+        if (that.onItem) {
+          if (typeof that.onItem === 'function')
+            that.onItem(item);
+        }
+      }
+      catch(e) {
+
+      }
+    },
+    raise_onConfirmEdit: function(item) {
+      let that = this;
+
+      try {
+        if (that.onConfirmEdit) {
+          if (typeof that.onConfirmEdit === 'function')
+            that.onConfirmEdit(item);
+        }
+      }
+      catch(e) {
+
+      }
+    },
+    raise_onCancelEdit: function() {
+      let that = this;
+
+      try {
+        if (that.onCancelEdit) {
+          if (typeof that.onCancelEdit === 'function')
+            that.onCancelEdit();
         }
       }
       catch(e) {
@@ -343,11 +390,11 @@ export default {
       let that = this;
 
       if (item) {
-        that.selectedItem = item;
+        that.set_selectedItem(item);
         // console.log("selectAdminRoleModel");
       }
       else {
-        that.selectedItem = null;
+        that.set_selectedItem(null);
       }
     },
     /*
@@ -434,20 +481,26 @@ export default {
       that.showDialogConfirmItemDelete = false;
 
     },
-    onConfirmEdit: function() {
+    internal_onConfirmEdit: function(item) {
       let that = this;
 
       // Edit off
       that.set_showItemEdit(false);
+
+      // event onConfirmEdit
+      that.raise_onConfirmEdit(item);
 
       // api -> lasciare come ultima funzione
       that.updateList();
     },
-    onCancelEdit: function() {
+    internal_onCancelEdit: function() {
       let that = this;
 
       // Edit off
       that.set_showItemEdit(false);
+
+      // event onConfirmEdit
+      that.raise_onCancelEdit();
 
       // api -> lasciare come ultima funzione
       that.updateList();
