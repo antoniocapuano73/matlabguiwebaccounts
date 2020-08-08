@@ -83,7 +83,7 @@
 
 <script>
 import {
-  isFunction,
+  IsFunction,
   } from "@/lib/utility/Utility.js"
 
 import TableEdit from "@/lib/components/Tables/TableEdit.vue";
@@ -256,7 +256,7 @@ export default {
         let that = this;
 
         // creat contextDb
-        if (isFunction(that.datasource)) {
+        if (IsFunction(that.datasource)) {
           that.contextDb = that.datasource();
         }
 

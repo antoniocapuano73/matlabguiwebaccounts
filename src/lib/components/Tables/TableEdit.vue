@@ -64,7 +64,7 @@
 
 <script>
 import {
-  isFunction,
+  IsFunction,
   } from "@/lib/utility/Utility.js"
 
 import {
@@ -185,7 +185,7 @@ export default {
         let that = this;
 
         // creat contextDb
-        if (isFunction(that.datasource)) {
+        if (IsFunction(that.datasource)) {
           that.contextDb = that.datasource();
         }
 

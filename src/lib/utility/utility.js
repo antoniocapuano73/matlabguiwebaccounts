@@ -43,7 +43,7 @@ export function copyObj(obj,src) {
     }
 }
 
-export function isFunction(obj) {
+export function IsFunction(obj) {
     let ret = false;
 
     if (obj) {
@@ -51,6 +51,32 @@ export function isFunction(obj) {
             ret = true;
         }
     }
+
+    return ret;
+}
+
+export function IsObject(obj) {
+    let ret = true;
+
+    if (null == obj || "object" != typeof obj) 
+        ret = false;
+
+    return ret;
+}
+
+export function IsCustomObject(obj,constructorName) {
+    let ret = false;
+
+    if (IsObject(obj))
+        try {
+            let customName = constructorName.trim();
+            let objectName = obj.constructor.name.trim();
+
+            ret = (objectName === customName);
+        }
+        catch(e) {
+
+        }
 
     return ret;
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <md-card v-show="!showUserEdit">
+    <md-card id="users_selectedCompany">
 
       <md-card-header data-background-color="green">
         <h4 class="title"><b>Companies</b></h4>
@@ -8,7 +8,7 @@
       </md-card-header>
 
       <md-card-content>
-        <select id="companyCombo" @change="onSelectedCompany()">
+        <select id="users_comboCompanies" @change="onSelectedCompany()">
           <option :value="company.Id" 
                   v-for="company in companyList" 
                   :key="company.Id">{{company.Name}}</option>
@@ -32,6 +32,9 @@
 </template>
 
 <script>
+import {
+  setTagPropertyEnabled
+} from "@/lib/utility/UtilityTag.js"
 
 import {
   UserModel,IsUserModel, 
@@ -46,7 +49,7 @@ import {
 
   getUserList,
   getUserListByIdCompany,
-  } from "@/api/Accounts/AccountController.js"
+} from "@/api/Accounts/AccountController.js"
 
 import {
   CompanyModel,IsCompanyModel,
@@ -221,9 +224,6 @@ export default {
         // aggiorna lista
         that.companyList = sortedList
 
-        let selectBox     = document.getElementById("companyCombo");
-        let selectedValue = selectBox.value;
-
         // simulate event
         if (sortedList) {
           if (sortedList.length > 0) {
@@ -238,7 +238,7 @@ export default {
     */
     fields: function() {
       return {
-        table: ["Id","UserName","Email"],
+        table: ["UserName","Email"],
         edit: new TableFields(
             new TableField("UserName","User Name"),
             new TableField("Email"),
@@ -268,6 +268,12 @@ export default {
       let that = this;
 
       that.showUserEdit = status;
+
+      /*
+        Nella modalita edit si disabilita
+        la possibilita di cambiare la compania
+      */
+      setTagPropertyEnabled("users_selectedCompany",!status);
     },
     onSelectedCompany: function(idSelectedCompany) {
       let that = this;
@@ -278,7 +284,7 @@ export default {
       */
       if (idSelectedCompany === undefined) {
 
-        let selectBox     = document.getElementById("companyCombo");
+        let selectBox     = document.getElementById("users_comboCompanies");
         let selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
         idSelectedCompany = selectedValue;
