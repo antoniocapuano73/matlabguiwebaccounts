@@ -35,6 +35,16 @@ function FilterUser(idCompany) {
 }
 
 /*
+    ADMINROLEUSER SECTION
+
+    Public Class AdminRoleUserModel
+        Public Id As String
+        Public Name As String
+        Public Active As Boolean
+    End Class
+*/
+
+/*
     ADMINROLE SECTION
 
     Public Class AdminRoleModel
@@ -460,6 +470,47 @@ export function getUserList(success,error) {
 
     axios
       .post(accountControllerURL +'/users/list',null)
+      .then(function (result){
+        if (typeof success === 'function') {
+            try {
+                /*
+                    array of user object
+                */
+                let list = [];
+
+                if (result) {
+                    if (result.data)
+                        list = result.data;
+                }
+
+                success(list);
+            }
+            catch (e){
+                console.log("AccountController.js function getUserList");
+                console.log(e);
+            }
+        }
+      })
+      .catch(function (e) {
+        if (typeof error === 'function')
+            try {
+                error(e);
+            }
+            catch (e){
+            }
+      })
+}
+
+/*
+    <HttpPost>
+    <Route("users/roles/list")>
+    <AllowAnonymous>
+    Public Function GetUserRoleList(<FromBody()> ByVal ApplicationUser As ApplicationUser) As IEnumerable(Of AdminRoleUserModel)
+*/
+export function getUserRoleList(userModel,success,error) {
+
+    axios
+      .post(accountControllerURL +'/users/roles/list',userModel)
       .then(function (result){
         if (typeof success === 'function') {
             try {

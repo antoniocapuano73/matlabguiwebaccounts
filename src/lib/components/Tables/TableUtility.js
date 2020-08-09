@@ -95,7 +95,7 @@ export function Datasource(constructorModel,isModel,updateModel,addModel,deleteM
 export function TableField(key,text,type) {
     this.key  = key;
     this.text = iif(text,text,key);
-    this.type = iif(type,type,0);
+    this.type = iif(type,type,"text");
 
 }
 
@@ -191,6 +191,18 @@ export function text(obj) {
         ret = obj.text;
     } else {
         ret = obj;
+    }
+
+    return ret;
+}
+
+export function type(obj) {
+    let ret = null;
+
+    if (IsTableField(obj)) {
+        ret = obj.type;
+    } else {
+        ret = "text";
     }
 
     return ret;

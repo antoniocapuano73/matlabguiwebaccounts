@@ -17,6 +17,11 @@
 
     </md-card>
 
+    <UserLoginInfo id="UserLoginInfo" v-show="showUserEdit"
+      :item="m_item">
+
+    </UserLoginInfo>
+
     <TableManagement id="Users"
       :title="titles()"
       :category="categories()"
@@ -25,7 +30,8 @@
       :fields="fields()"
       :datasource="datasource"
       
-      :onShowEdit="onShowUserEdit">
+      :onShowEdit="onShowUserEdit"
+      :onItem="onSelectedItem">
     </TableManagement>
 
   </div>
@@ -59,6 +65,7 @@ import {
   getCompanyList,
   } from "@/api/Accounts/AccountController.js"
 
+import UserLoginInfo from "@/pages/Users/UserLoginInfo.vue";
 import TableManagement from "@/lib/components/Tables/TableManagement.vue";
 import {
   Datasource,
@@ -80,12 +87,14 @@ export default {
   name: "UsersManagement",
   components: {
     TableManagement,
+    UserLoginInfo,
   },
   data: function() {
     return {
       companyList: null,
       idSelectedCompany: -1,
       showUserEdit: false,
+      m_item: null,
     };
   },
   mounted: function() {
@@ -293,7 +302,12 @@ export default {
       // idSelectedCompany
       that.idSelectedCompany = idSelectedCompany;
 
-    }
+    },
+    onSelectedItem: function(item) {
+      let that = this;
+
+      that.m_item = item;
+    },
   },
 }
 

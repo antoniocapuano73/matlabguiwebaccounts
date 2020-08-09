@@ -43,10 +43,10 @@
       <md-card-content>
 
         <div class="md-layout">
-          <div class="md-layout-item md-small-size-100 md-size-33" v-for="(item,index) in __FIELDS__" :key="index">
+          <div class="md-layout-item md-small-size-100 md-size-50" v-for="(item,index) in __FIELDS__" :key="index">
             <md-field>
               <label>{{fieldText(item)}}</label>
-              <md-input v-model="m_item[fieldKey(item)]"></md-input>
+              <md-input :type="fieldType(item)" v-model="m_item[fieldKey(item)]"></md-input>
             </md-field>
           </div>
 
@@ -69,7 +69,7 @@ import {
 
 import {
   Datasource,
-  key,text,
+  key,text,type,
   TableField,
   TableFields,
   IsTableFields,
@@ -177,6 +177,9 @@ export default {
     },
     fieldText: function(field) {
       return text(field);
+    },
+    fieldType: function(field) {
+      return type(field);
     },
     /*
       DATABASE CONTEXT
@@ -293,7 +296,7 @@ export default {
         // context Db
         that.createContextDb();
       },
-  }
+  },
 };
 </script>
 
