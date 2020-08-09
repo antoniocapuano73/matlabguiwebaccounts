@@ -303,4 +303,8 @@ export default {
   .category {
     font-size: 125%;
   }
+
+  select {
+    font-size: 115%;
+  }
 </style>
