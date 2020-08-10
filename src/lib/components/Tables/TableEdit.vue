@@ -35,7 +35,7 @@
 <template>
   <form>
     <md-card>
-      <md-card-header data-background-color="green">
+      <md-card-header :data-background-color="theme">
         <h4 class="title"><b>{{title}}</b></h4>
         <p class="category"><b>{{category}}</b></p>
       </md-card-header>
@@ -51,8 +51,8 @@
           </div>
 
           <div class="md-layout-item md-size-100 text-right">
-            <md-button class="button md-raised md-success" @click="doActionOk();">OK</md-button>
-            <md-button class="button md-raised md-success" @click="doActionCancel();">Cancel</md-button>
+            <md-button :class="themeButtonColor()" @click="doActionOk();">OK</md-button>
+            <md-button :class="themeButtonColor()" @click="doActionCancel();">Cancel</md-button>
           </div>
 
         </div>
@@ -84,6 +84,10 @@ export default {
     };
   },
   props: {
+    theme: {
+      type: String,
+      default: process.env.VUE_APP_SKIN_THEME,
+    },
     fields: {
       type: Array,
       default: function() {return []},
@@ -165,10 +169,94 @@ export default {
 
       }
 
+      //console.log("__FIELDS__");
+      //console.log(ret);
+      
       return ret;
     },
   },
   methods: {
+    /*
+      THEME SECTION
+    */
+   themeButtonColor: function() {
+    /*
+          [data-background-color="purple"],
+          .md-tabs.md-primary .md-tabs-navigation{
+              background: linear-gradient(60deg, $purple-400, $purple-600);
+              @include shadow-big-color($brand-primary);
+          }
+
+          [data-background-color="blue"],
+          .md-tabs.md-info .md-tabs-navigation{
+              background: linear-gradient(60deg, $blue-400, $blue-600);
+              @include shadow-big-color($brand-info);
+          }
+
+          [data-background-color="green"],
+          .md-tabs.md-success .md-tabs-navigation{
+              background: linear-gradient(60deg, $green-400, $green-600);
+              @include shadow-big-color($brand-success);
+          }
+
+          [data-background-color="orange"],
+          .md-tabs.md-warning .md-tabs-navigation{
+              background: linear-gradient(60deg, $orange-400, $orange-600);
+              @include shadow-big-color($brand-warning);
+          }
+
+          [data-background-color="red"],
+          .md-tabs.md-danger .md-tabs-navigation{
+              background: linear-gradient(60deg, $red-400, $red-600);
+              @include shadow-big-color($brand-danger);
+          }
+
+          ...
+
+          &.md-default{
+              @include btn-styles($gray-light);
+          }
+
+          &.md-primary{
+            @include btn-styles($brand-primary);
+          }
+          &.md-info{
+            @include btn-styles($brand-info);
+          }
+          &.md-success{
+            @include btn-styles($brand-success);
+          }
+          &.md-warning{
+            @include btn-styles($brand-warning);
+          }
+          &.md-danger{
+            @include btn-styles($brand-danger);
+          }          
+    */
+
+    let ret = "md-default";
+
+    switch(process.env.VUE_APP_SKIN_THEME) {
+      case "purple":
+        ret = "md-primary";
+        break;
+      case "blue":
+        ret = "md-info";
+        break;
+      case "green":
+        ret = "md-success";
+        break;
+      case "orange":
+        ret = "md-warning";
+        break;
+      case "red":
+        ret = "md-danger";
+        break;
+    }
+
+    return ret;
+
+   },
     /*
       HTML TABLE SECTION
     */

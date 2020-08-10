@@ -4,6 +4,7 @@
       :title="titles()"
       :category="categories()"
       textButtonItemAdd="New Admin Role"
+      :fields="fields()"
       :datasource="createDatasource">
     </TableManagement>
 
@@ -23,6 +24,8 @@ import {
 import TableManagement from "@/lib/components/Tables/TableManagement.vue";
 import {
   Datasource,
+  TableField,
+  TableFields,
   } from "@/lib/components/Tables/TableUtility.js"
 
 export default {
@@ -43,6 +46,15 @@ export default {
     /*
       HTML SECTION
     */
+    fields: function() {
+      return {
+        table: ["Id","Name"],
+        edit: new TableFields(
+            new TableField("Id"),
+            new TableField("Name"),
+          ),
+        };
+    },
     titles: function() {
       return {
         table: "Admin Roles",

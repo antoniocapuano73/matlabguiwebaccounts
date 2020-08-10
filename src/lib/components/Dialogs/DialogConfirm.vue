@@ -8,21 +8,19 @@
 -->
 <template>
     <!-- Modal confirm -->
-    <div class="modal-mask" role="document" v-show="show">
+    <div class="modal-mask" v-show="show">
+
         <div class="modal-wrapper">
             <div class="modal-container">
-              <div class="modal-header">
-                  <h3>{{title}}</h3>
-              </div>
-                <div class="modal-body">
-                  {{prompt}}
-                </div>
+                <div class="modal-header"><h3>{{title}}</h3></div>
+                <div class="modal-body"> {{prompt}}</div>
                 <div class="modal-footer">
-                    <button type="button" class="modal-default-button" @click="doActionOk();">Ok</button>
-                    <button type="button" class="modal-default-button" @click="doActionCancel();">Cancel</button>
+                    <md-button :class="themeButtonColor()" @click="__ActionOk__()">Ok</md-button>
+                    <md-button :class="themeButtonColor()" @click="__ActionCancel__()">Cancel</md-button>
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -31,6 +29,10 @@
 export default {
     name: "DialogConfirm",
     props: {
+        theme: {
+            type: String,
+            default: process.env.VUE_APP_SKIN_THEME,
+        },
         show: {
             type: Boolean,
             default: false
@@ -53,31 +55,62 @@ export default {
         },
     },
     methods: {
-        doActionOk: function () {
+		/*
+        THEME SECTION
+        */
+        themeButtonColor: function() {
+
+            let ret = "md-default";
+
+            switch(process.env.VUE_APP_SKIN_THEME) {
+                case "purple":
+                    ret = "md-primary";
+                    break;
+                case "blue":
+                    ret = "md-info";
+                    break;
+                case "green":
+                    ret = "md-success";
+                    break;
+                case "orange":
+                    ret = "md-warning";
+                    break;
+                case "red":
+                    ret = "md-danger";
+                break;
+            }
+
+            return ret;
+
+        },
+        __ActionOk__: function () {
             let that = this;
 
             try {
                 if (typeof that.actionOk === 'function')
-                    if (that.actionOk != null)
+                    if (that.actionOk !== null)
                         that.actionOk();
             } 
             catch (e) {
-
+                console.log('DialogConfirm.doActionOk');
+                console.log(e);
             }
         },
-        doActionCancel: function () {
+        __ActionCancel__: function () {
             let that = this;
 
             try {
                 if (typeof that.actionCancel === 'function')
-                    if (that.actionCancel != null)
+                    if (that.actionCancel !== null) {
                         that.actionCancel();
+                    };
             } 
             catch (e) {
-
+                console.log('DialogConfirm.doActionCancel');
+                console.log(e);
             }
         },
-    }
+    },
 };
 </script>
 
@@ -113,7 +146,7 @@ export default {
 }
 
 .modal-header {
-	background-color:green;
+	background-color:blue;
 	padding: 20px;
 }
 
@@ -156,4 +189,7 @@ export default {
   margin-right: 5px;
 }
 
+.md-button {
+    width: 70px;
+}
 </style>

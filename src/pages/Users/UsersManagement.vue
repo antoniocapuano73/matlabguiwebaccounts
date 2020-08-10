@@ -2,7 +2,7 @@
   <div class="content">
     <md-card id="users_selectedCompany">
 
-      <md-card-header data-background-color="green">
+      <md-card-header :data-background-color="theme">
         <h4 class="title"><b>Companies</b></h4>
         <p class="category"><b>Select User Company</b></p>
       </md-card-header>
@@ -18,11 +18,13 @@
     </md-card>
 
     <UserLoginInfo id="UserLoginInfo" v-show="showUserEdit"
+      :theme="theme"
       :item="m_item">
 
     </UserLoginInfo>
 
     <TableManagement id="Users"
+      :theme="theme"
       :title="titles()"
       :category="categories()"
       textButtonItemAdd="New User"
@@ -88,6 +90,12 @@ export default {
   components: {
     TableManagement,
     UserLoginInfo,
+  },
+  props: {
+    theme: {
+      type: String,
+      default: process.env.VUE_APP_SKIN_THEME,
+    },
   },
   data: function() {
     return {

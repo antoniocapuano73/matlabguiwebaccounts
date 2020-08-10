@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-      sidebarBackground: "green",
+      sidebarBackground: "blue",
       sidebarBackgroundImage: require("@/assets/img/sidebar-2.jpg")
     };
   }

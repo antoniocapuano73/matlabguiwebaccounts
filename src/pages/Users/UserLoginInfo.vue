@@ -7,7 +7,7 @@
 <template>
   <form>
     <md-card>
-      <md-card-header data-background-color="green">
+      <md-card-header :data-background-color="theme">
         <h4 class="title"><b>{{title}}</b></h4>
         <p class="category"><b>{{category}}</b></p>
       </md-card-header>
@@ -17,7 +17,7 @@
         <div class="md-layout">
 
             <div class="md-layout-item md-size-50 text-left">
-                <md-table v-model="tableRoleList" table-header-color="green">
+                <md-table v-model="tableRoleList" :table-header-color="theme">
                     <md-table-row slot="md-table-row" slot-scope="{ item }">
 
                         <md-table-cell md-label="">
@@ -62,6 +62,10 @@ export default {
     };
   },
   props: {
+    theme: {
+      type: String,
+      default: process.env.VUE_APP_SKIN_THEME,
+    },
     title: {
       type: String,
       default: "Login"
