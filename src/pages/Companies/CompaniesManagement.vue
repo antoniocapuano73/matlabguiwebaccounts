@@ -52,7 +52,7 @@ export default {
   props: {
     theme: {
       type: String,
-      default: process.env.VUE_APP_SKIN_THEME,
+      default: process.env.VUE_APP_THEME,
     },
   },
   mounted: function() {

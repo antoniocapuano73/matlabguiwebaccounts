@@ -17,6 +17,12 @@
           edit:  null
         }
         
+        display = {
+          buttonEdit:   true,
+          buttonDelete: true,
+          buttonNew:    true
+        }
+
         datasource
 
         onShowEdit    -> onshowedit(showItemEdit)
@@ -36,20 +42,20 @@
           <md-table-row slot="md-table-row" slot-scope="{item}" @click="selectItem(item)">
             <md-table-cell :md-label="fieldText(field)" v-for="(field,index) in fields.table" :key="index">{{ item[fieldKey(field)] }}</md-table-cell>
 
-            <md-table-cell md-label="">
+            <md-table-cell md-label="" v-show="display.buttonEdit">
               <md-button :class="themeButtonColor()" @click="tableItemEdit(item);">
                 <md-icon>create</md-icon>
               </md-button>
             </md-table-cell>
 
-            <md-table-cell md-label="">
+            <md-table-cell md-label="" v-show="display.buttonDelete">
               <md-button :class="themeButtonColor()" @click="tableItemDelete(item);">
                 <md-icon>clear</md-icon>
               </md-button>
             </md-table-cell>
           </md-table-row>
         </md-table>
-        <div class="md-layout-item md-size-100 text-right">
+        <div class="md-layout-item md-size-100 text-right" v-show="display.buttonNew">
           <md-button :class="themeButtonColor()" @click="tableItemNew()"><md-icon>add_box</md-icon>{{textButtonItemAdd}}</md-button>
         </div>
       </md-card-content>
@@ -119,6 +125,14 @@ export default {
       default: function() { return {
         table: ["Id","Name"],
         edit: null,
+        }},
+    },
+    display: {
+      type: Object,
+      default: function() { return {
+        buttonEdit:   true,
+        buttonDelete: true,
+        buttonNew:    true
         }},
     },
     datasource: {

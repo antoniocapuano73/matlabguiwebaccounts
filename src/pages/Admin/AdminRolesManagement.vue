@@ -2,6 +2,7 @@
 
     <TableManagement 
       :theme="theme"
+      :display="display()"
       :title="titles()"
       :category="categories()"
       textButtonItemAdd="New Admin Role"
@@ -42,7 +43,7 @@ export default {
   props: {
     theme: {
       type: String,
-      default: process.env.VUE_APP_SKIN_THEME,
+      default: process.env.VUE_APP_THEME,
     },
   },
   mounted: function() {
@@ -53,6 +54,13 @@ export default {
     /*
       HTML SECTION
     */
+    display: function() {
+      return {
+        buttonEdit:   false,
+        buttonDelete: false,
+        buttonNew:    false
+      };
+    },
     fields: function() {
       return {
         table: ["Id","Name"],
