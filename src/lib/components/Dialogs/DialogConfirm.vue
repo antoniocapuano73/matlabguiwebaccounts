@@ -15,8 +15,8 @@
                 <div class="modal-header"><h3>{{title}}</h3></div>
                 <div class="modal-body"> {{prompt}}</div>
                 <div class="modal-footer">
-                    <md-button :class="themeButtonColor()" @click="__ActionOk__()">Ok</md-button>
-                    <md-button :class="themeButtonColor()" @click="__ActionCancel__()">Cancel</md-button>
+                    <md-button @click="__ActionOk__()">Ok</md-button>
+                    <md-button @click="__ActionCancel__()">Cancel</md-button>
                 </div>
             </div>
         </div>
@@ -29,10 +29,6 @@
 export default {
     name: "DialogConfirm",
     props: {
-        theme: {
-            type: String,
-            default: process.env.VUE_APP_SKIN_THEME,
-        },
         show: {
             type: Boolean,
             default: false
@@ -55,34 +51,6 @@ export default {
         },
     },
     methods: {
-		/*
-        THEME SECTION
-        */
-        themeButtonColor: function() {
-
-            let ret = "md-default";
-
-            switch(process.env.VUE_APP_SKIN_THEME) {
-                case "purple":
-                    ret = "md-primary";
-                    break;
-                case "blue":
-                    ret = "md-info";
-                    break;
-                case "green":
-                    ret = "md-success";
-                    break;
-                case "orange":
-                    ret = "md-warning";
-                    break;
-                case "red":
-                    ret = "md-danger";
-                break;
-            }
-
-            return ret;
-
-        },
         __ActionOk__: function () {
             let that = this;
 
@@ -146,7 +114,7 @@ export default {
 }
 
 .modal-header {
-	background-color:blue;
+	background-color:burlywood;
 	padding: 20px;
 }
 

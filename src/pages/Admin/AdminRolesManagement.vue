@@ -1,6 +1,7 @@
 <template>
 
     <TableManagement 
+      :theme="theme"
       :title="titles()"
       :category="categories()"
       textButtonItemAdd="New Admin Role"
@@ -37,6 +38,12 @@ export default {
     return {
 
     };
+  },
+  props: {
+    theme: {
+      type: String,
+      default: process.env.VUE_APP_SKIN_THEME,
+    },
   },
   mounted: function() {
       let that = this;

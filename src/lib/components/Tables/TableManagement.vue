@@ -112,7 +112,7 @@ export default {
   props: {
     theme: {
       type: String,
-      default: process.env.VUE_APP_SKIN_THEME,
+      default: null,
     },
     fields: {
       type: Object,
@@ -234,9 +234,11 @@ export default {
             }          
       */
 
+      let that = this;
+
       let ret = "md-default";
 
-      switch(process.env.VUE_APP_SKIN_THEME) {
+      switch(that.theme) {
         case "purple":
           ret = "md-primary";
           break;
@@ -528,13 +530,46 @@ export default {
         if (that.isItem(item)) {
           // the modal id="confirmDeleteModal"
           // manage the delete action
-          that.textDialogConfirmItemDelete = 
-            "Confirm to delete the item '" + item.Name + "' ?"
+          that.textDialogConfirmItemDelete = that.dialogText(item);
           that.showDialogConfirmItemDelete = true;
         }
       }
       else 
         that.confirmItemDelete(item);
+    },
+    dialogText: function(item) {
+      let that = this;
+      let text = null;
+      
+      try {
+        if (item) {
+          let i=0;
+          for (var field of that.fields.table) {
+            let key = that.fieldKey(field);
+
+            if (item.hasOwnProperty(key)) {
+              let partialText = item[key];
+
+              if (partialText)
+                if (i===0) {
+                  text = 'Do you confirm to delete: ' + partialText;
+                } else {
+                  text = text + ' - ' + partialText;
+                };
+
+              i=i+1;
+            }          
+          }
+
+          if (i !== 0)
+            text = text + ' ?';
+        }
+      } catch (e) {
+        console.log('TableManagement.dialogText function');
+        console.log(e);
+      }
+
+      return text;
     },
     dialogOk: function () {
       let that = this;
