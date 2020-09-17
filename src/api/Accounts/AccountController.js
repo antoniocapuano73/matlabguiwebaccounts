@@ -446,7 +446,7 @@ export function IsUserModel(userModel) {
     if (userModel) {
         try {
             let Id   = userModel.Id;
-            let Name = userModel.UserName.trim();
+            let Name = userModel.Email.trim();
 
             if ((Id) && (Name)) {
                 // return
@@ -461,9 +461,86 @@ export function IsUserModel(userModel) {
     return ret;
 }
 
-export function UserModel(Id,UserName) {
+export function UserModel(Id,Email) {
     this.Id       = iif(Id, Id, '');
-    this.UserName = iif(UserName,UserName,'');
+    this.UserName = iif(Email,Email,'');
+    this.Email    = iif(Email,Email,'');
+}
+
+/*
+    Public Class UserRegisterModel
+        Public Email As String
+
+        ' **********************************
+        ' IMPORTANTE
+        '   Le proprietà:
+        '       Password
+        '       ConfirmPassowrd
+        '
+        ' sono definite solamente nella classe UserModel per gestire 
+        ' (1) la registrazione di un nuovo utente
+        ' (2) la password temporanea
+        '
+        ' Assolutamenta la classe ApplicationUser non deve contenere
+        ' questa due proprità
+        ' **********************************
+        Public Property Password As String
+        Public Property ConfirmPassword As String
+
+        ' additional data
+        Public CompanyId As Integer
+    End Class
+*/
+export function UserRegisterModel() {
+    this.Email           = '';
+    this.Password        = '';
+    this.ConfirmPassword = '';
+    this.CompanyId       = -1;
+}
+
+/*
+    Public Class UserRegisterMessageModel
+        Public Succeeded As Boolean
+        Public Message As String
+    End Class
+*/
+export function UserRegisterResultModel() {
+    this.Succeeded = false;
+    this.Message   = '';
+}
+
+export function registerUser(item,success,error) {
+
+    axios
+        .post(accountControllerURL +'/Register',item)
+        .then(function (result) {
+            if (typeof success === 'function') {
+                try {
+                    let data = result.data;
+
+                    /*
+                        Public Class UserRegisterResultModel
+                            Public Succeeded As Boolean
+                            Public Message As String
+                        End Class
+                    */
+                    success(data);
+                }
+                catch (e){
+                    console.log("AccountController.js function registerUser");
+                    console.log(e);
+                }
+            }
+        })
+        .catch(function (e) {
+            if (typeof error === 'function')
+                try {
+                    error(e);
+                }
+                catch (e) {
+                }
+        })
+
 }
 
 export function getUserList(success,error) {

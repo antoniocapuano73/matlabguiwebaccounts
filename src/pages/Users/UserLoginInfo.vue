@@ -16,7 +16,7 @@
 
         <div class="md-layout">
 
-            <div class="md-layout-item md-size-50 text-left">
+            <div :class="class_mdLayoutItem" v-show="tableRoleList != null">
                 <md-table v-model="tableRoleList" :table-header-color="theme">
                     <md-table-row slot="md-table-row" slot-scope="{ item }">
 
@@ -30,13 +30,20 @@
                 </md-table>
             </div>
 
-            <div class="md-layout-item md-size-50 text-left">
-                <md-input type="checkbox" v-model="m_item.HasTemporaryPassword"></md-input>
-                <label>Create a temporary password</label>
+            <div :class="class_mdLayoutItem">
+                <md-field>
+                  <md-input type="checkbox" v-model="m_item.HasTemporaryPassword" disabled></md-input>
+                  <label>User has a temporary password</label>
+                </md-field>
 
-                <md-field v-show="m_item.HasTemporaryPassword">
-                    <label>Temporary Password</label>
-                    <md-input v-model="m_item.PasswordHash" disabled></md-input>
+                <md-field>
+                    <label>User name</label>
+                    <md-input v-model="m_item.UserName"></md-input>
+                </md-field>
+
+                <md-field>
+                    <label>Email</label>
+                    <md-input v-model="m_item.Email"></md-input>
                 </md-field>
             </div>
 
@@ -90,6 +97,17 @@ export default {
       that.updateRoleList();
 
   },
+  computed: {
+    class_mdLayoutItem: function() {
+      let that = this;
+
+      if (that.tableRoleList != null) {
+        return "md-layout-item md-size-50 text-left";
+      } else {
+        return "md-layout-item md-size-100 text-left";
+      }
+    },
+  },
   methods: {
       updateRoleList: function() {
             let that = this;
@@ -116,12 +134,12 @@ export default {
   },
   watch: { 
       item: function(nv) {
-          let that = this;
+        let that = this;
 
-          that.m_item = nv;
+        that.m_item = nv;
 
-      //api call
-      that.updateRoleList();
+        //api call
+        that.updateRoleList();
       },
   }
 

@@ -65,8 +65,8 @@ export default {
       return {
         table: ["Id","Name"],
         edit: new TableFields(
-            new TableField("Id"),
-            new TableField("Name"),
+                new TableField("Id"),
+                new TableField("Name"),
           ),
         };
     },
@@ -78,7 +78,7 @@ export default {
     },
     categories: function() {
       return {
-        table: "Modify/Delete/Add Role",
+        table: "",
         edit: "Complete/Modify Role",
         };
     },

@@ -9,8 +9,8 @@
 
       <md-card-content>
         <select id="users_comboCompanies" @change="onSelectedCompany()">
-          <option :value="company.Id" 
-                  v-for="company in companyList" 
+          <option v-for="company in companyList" 
+                  :value="company.Id"
                   :key="company.Id">{{company.Name}}</option>
         </select>
       </md-card-content>
@@ -20,10 +20,9 @@
     <UserLoginInfo id="UserLoginInfo" v-show="showUserEdit"
       :theme="theme"
       :item="m_item">
-
     </UserLoginInfo>
 
-    <TableManagement id="Users"
+    <TableManagement ref="Users" v-show="!showUserRegister"
       :theme="theme"
       :title="titles()"
       :category="categories()"
@@ -31,10 +30,29 @@
 
       :fields="fields()"
       :datasource="datasource"
+
+      :onBeforeNewItem="onBeforeNewItem"
+      :externalForms="externalForms()"
       
       :onShowEdit="onShowUserEdit"
-      :onItem="onSelectedItem">
+      :onSelectedItem="onSelectedItem">
     </TableManagement>
+
+    <UserRegister v-show="showUserRegister"
+      :theme="theme"
+      :companyId="idSelectedCompany"
+      :actionOk="UserRegisterOk"
+      :actionCancel="UserRegisterCancel">
+
+    </UserRegister>
+
+    <!-- Modal confirm -->
+      <DialogMessage v-show="showDialogErrorUserRegister"
+        title="Register User"
+        :prompt="textDialogErrorUserRegister"
+        :actionOk="hideDialogErrorUserRegister">
+
+      </DialogMessage>
 
   </div>
 </template>
@@ -45,6 +63,7 @@ import {
 } from "@/lib/utility/UtilityTag.js"
 
 import {
+  registerUser,
   UserModel,IsUserModel, 
   deleteUser,
   updateUser,
@@ -61,19 +80,19 @@ import {
 
 import {
   CompanyModel,IsCompanyModel,
-  addCompany,
-  deleteCompany,
-  updateCompany,
   getCompanyList,
   } from "@/api/Accounts/AccountController.js"
 
 import UserLoginInfo from "@/pages/Users/UserLoginInfo.vue";
+import UserRegister from "@/pages/Users/UserRegister.vue";
 import TableManagement from "@/lib/components/Tables/TableManagement.vue";
 import {
   Datasource,
   TableField,
   TableFields,
   } from "@/lib/components/Tables/TableUtility.js"
+
+import DialogMessage from "@/lib/components/Dialogs/DialogMessage.vue"
 
 export default { 
   /*
@@ -90,6 +109,8 @@ export default {
   components: {
     TableManagement,
     UserLoginInfo,
+    UserRegister,
+    DialogMessage,
   },
   props: {
     theme: {
@@ -102,7 +123,10 @@ export default {
       companyList: null,
       idSelectedCompany: -1,
       showUserEdit: false,
+      showUserRegister: false,
       m_item: null,
+      showDialogErrorUserRegister: false,
+      textDialogErrorUserRegister: '',
     };
   },
   mounted: function() {
@@ -141,22 +165,8 @@ export default {
         return 0;
       }
 
-      var __addUser__ = function(success,error) {
-        addUser(success,error);
-      };
-
-      var __getUserList__ = function(success,error) {
-        var sortUserList = function(list) {
-          let sortedList = list;
-
-          if (list) {
-            if (list.length > 0) {
-              sortedList = list.sort(compareUser);
-            }
-          }
-        }
-        getUserList(sortUserList,error);
-      };
+      /*
+      var __addUser__     = function(success,error) {};
 
       if (that.idSelectedCompany > 0) {
         let idCompany = that.idSelectedCompany;
@@ -164,6 +174,15 @@ export default {
         __addUser__ = function(success,error) {
           addUserByIdCompany(idCompany,success,error);
         }
+
+      }
+
+      */
+
+      var __getUserList__ = function(success,error) {};
+
+      if (that.idSelectedCompany > 0) {
+        let idCompany = that.idSelectedCompany;
 
         __getUserList__ = function(success,error) {
           var sortUserList = function(list) {
@@ -187,13 +206,74 @@ export default {
           return new Datasource(
             UserModel,IsUserModel,
             updateUser,
-            __addUser__,
+            null,                   // __addUser__
             deleteUser,
             __getUserList__);
         })
     },
   },
   methods: {
+    /*
+      EXTERNAL FORMS
+    */
+    externalForms: function() {
+      return {
+        newItem: true,
+      }
+    },
+    onBeforeNewItem: function() {
+      let that = this;
+
+      that.showUserRegister = true;
+    },
+    hideDialogErrorUserRegister: function() {
+      let that = this;
+
+      that.showDialogErrorUserRegister = false;
+    },
+    UserRegisterOk: function(newUser) {
+      let that = this;
+
+      registerUser(newUser,function(userRegisterMessage) {
+        /*
+            Public Class UserRegisterResultModel
+                Public Succeeded As Boolean
+                Public Message As String
+            End Class
+        */
+
+        let canUpdateList = false;
+
+        if (userRegisterMessage) {
+          if (userRegisterMessage.Succeeded) {
+            canUpdateList = true;
+          }
+        }
+
+        if (canUpdateList) {
+          // aggiorna la lista degli utenti
+          that.$refs.Users.updateList();
+
+          // nascondi form aggiunta nuovo utente
+          that.showUserRegister = false;
+        } else {
+          
+          // get Error Message
+          if (userRegisterMessage) {
+            that.textDialogErrorUserRegister = userRegisterMessage.Message;
+          }
+
+          // show Error Message
+          that.showDialogErrorUserRegister = true;
+        }
+      });
+
+    },
+    UserRegisterCancel: function() {
+      let that = this;
+
+      that.showUserRegister = false;
+    },
     /*
       DATABASE SECTION
     */
@@ -255,10 +335,8 @@ export default {
     */
     fields: function() {
       return {
-        table: ["UserName","Email"],
+        table: ["Email"],
         edit: new TableFields(
-            new TableField("UserName","User Name"),
-            new TableField("Email"),
             new TableField("FirstName","First Name"),
             new TableField("LastName","Last Name"),
             new TableField("PhoneNumber","Phone Number"),
@@ -329,4 +407,81 @@ export default {
   select {
     font-size: 115%;
   }
+
+.modal-mask {
+	position: fixed;
+	z-index: 9998;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: table;
+	transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.modal-container {
+	width: 25rem;
+	margin: 0px auto;
+
+	background-color: #fff;
+
+	border-radius: 4px;
+	overflow: hidden;
+	transition: all 0.3s ease;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header {
+	background-color:burlywood;
+	padding: 20px;
+}
+
+.modal-header h3 {
+	margin: 0;
+	color: white;
+}
+
+.modal-body {
+	margin: 10px 0px;
+	padding: 20px 20px;
+  font-size: 150%;
+}
+
+.modal-footer {
+	padding: 20px;
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+	display: flex;
+	justify-content: flex-end;
+}
+
+.modal-default-text {
+  flex: 1;
+}
+
+.modal-default-button {
+  cursor: pointer;
+
+  background: green;
+  color: white;
+
+  border: none;
+  border-radius: 3px;
+
+  padding: 8px 16px;
+  transition: 0.3s;
+
+  width: 100px;
+  margin-right: 5px;
+}
+
+.md-button {
+    width: 70px;
+}
 </style>

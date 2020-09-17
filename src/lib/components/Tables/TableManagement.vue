@@ -25,9 +25,15 @@
 
         datasource
 
-        onShowEdit    -> onshowedit(showItemEdit)
-        onItem        -> onitem(item)
-        onConfirmEdit -> onConfirmEdit(item)
+        // dialogBox
+        externalForms = {
+          newItem: false,
+        }
+
+        onBeforeNewItem
+        onShowEdit      -> onshowedit(showItemEdit)
+        onSelectedItem  -> onitem(item)
+        onConfirmEdit   -> onConfirmEdit(item)
         onCancelEdit
 -->
 <template>
@@ -135,6 +141,12 @@ export default {
         buttonNew:    true
         }},
     },
+    externalForms: {
+     type: Object,
+      default: function() { return {
+        newItem:   false,
+        }},
+    },
     datasource: {
       type: Function,
       default: null,
@@ -157,11 +169,23 @@ export default {
       type: String,
       default: "New Row" 
     },
+    onBeforeNewItem: {
+      type: Function,
+      default: null
+    },
     onShowEdit: {
       type: Function,
       default: null
     },
-    onItem: {
+    onSelectedItem: {
+      type: Function,
+      default: null
+    },
+    onConfirmEdit: {
+      type: Function,
+      default: null
+    },
+    onCancelEdit: {
       type: Function,
       default: null
     },
@@ -308,15 +332,15 @@ export default {
       let that = this;
 
       that.selectedItem = item;
-      that.raise_onItem(item);
+      that.raise_onSelectedItem(item);
     },
-    raise_onItem: function(item) {
+    raise_onSelectedItem: function(item) {
       let that = this;
       
       try {
-        if (that.onItem) {
-          if (typeof that.onItem === 'function')
-            that.onItem(item);
+        if (that.onSelectedItem) {
+          if (typeof that.onSelectedItem === 'function')
+            that.onSelectedItem(item);
         }
       }
       catch(e) {
@@ -348,6 +372,36 @@ export default {
       catch(e) {
 
       }
+    },
+    raise_onBeforeNewItem: function() {
+      let that = this;
+
+      try {
+        if (that.onBeforeNewItem) {
+          if (typeof that.onBeforeNewItem === 'function')
+            that.onBeforeNewItem();
+        }
+      }
+      catch(e) {
+
+      }
+    },
+    /*
+      EXTERNAL FORMS
+    */
+    existingFormNewItem: function() {
+      let that = this;
+      let ret  = false;
+
+      try {
+        ret = that.externalForms.newItem;
+
+      } catch (e) {
+        console.log("TableManagement.existingFormNewItem.error");
+        console.log(e);
+      }
+
+      return ret;
     },
     /*
       DATABASE CONTEXT
@@ -518,18 +572,39 @@ export default {
     */
     tableItemNew: function() {
       let that = this;
+      let canUseCustomFormNewItem = that.existingFormNewItem();
 
-      that.addModel(function(item) {
-        if (item) {
-          that.selectItem(item);
+      if (canUseCustomFormNewItem == false) {
+        that.raise_onBeforeNewItem();
 
-          // Edit on
-          that.set_showItemEdit(true);
-        }
-        else {
-          // ERR
-        }
-      });
+        /*
+          Non esiste un form personalizzato per creare un nuovo item.
+          Si richiama la funzione api che crea un ITEM VUOTO
+        */
+        that.addModel(function(item) {
+          that.tableSelectItem(item);
+        });
+
+      } else {
+        that.raise_onBeforeNewItem();
+
+        /*
+          ESISTE FORM PERSONALIZZATO PER CREARE NUOVO ITEM
+        */
+
+      }
+
+    },
+    tableSelectItem: function(item) {
+      if (item) {
+        that.selectItem(item);
+
+        // Edit on
+        that.set_showItemEdit(true);
+      }
+      else {
+        // ERR
+      }
     },
     tableItemEdit: function(item) {
       let that = this;
