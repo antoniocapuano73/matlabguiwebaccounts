@@ -7,6 +7,10 @@
       :sidebar-background-image="sidebarBackgroundImage"
     >
       <mobile-menu slot="content"></mobile-menu>
+      <sidebar-link to="/accounts/console">
+        <md-icon>admin_panel_settings</md-icon>
+        <p>Admin Console</p>
+      </sidebar-link>
       <sidebar-link to="/accounts/roles">
         <md-icon>admin_panel_settings</md-icon>
         <p>Admin Roles</p>

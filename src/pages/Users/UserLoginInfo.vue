@@ -37,11 +37,6 @@
                 </md-field>
 
                 <md-field>
-                    <label>User name</label>
-                    <md-input v-model="m_item.UserName"></md-input>
-                </md-field>
-
-                <md-field>
                     <label>Email</label>
                     <md-input v-model="m_item.Email"></md-input>
                 </md-field>

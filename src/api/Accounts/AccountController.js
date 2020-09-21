@@ -790,3 +790,77 @@ export function updateUser(item,success,error) {
         })
 
 }
+
+
+/*
+    CONSOLE SECTION
+
+    ' ***********************************************
+    ' IMPORTANTE:
+    '   CommandText è un JSON della classe i parametri
+    '   del comando
+    ' ************************************************
+    Public Class ConsoleCommandModel
+        Public CommandName As String
+        Public CommandText As String
+    End Class
+
+    Public Class ConsoleParametersCommandDatabaseDefaultUsersModel
+        Public DeveloperEmail As String
+        Public DeveloperPassword As String
+
+        Public CustomerEmail As String
+        Public CustomerPassword As String
+    End Class
+*/
+
+export const CONSOLE_CREATE_DATABASE_DEFAULT_USERS = "CREATE_DATABASE_DEFAULT_USERS";
+
+export function ConsoleCommandDatabaseDefaultUsersModel(commandParameters) {
+    this.CommandName       = CONSOLE_CREATE_DATABASE_DEFAULT_USERS;
+    this.CommandParameters = 
+        new ConsoleParametersCommandDatabaseDefaultUsersModel(
+            commandParameters.DeveloperEmail,
+            commandParameters.DeveloperPassword,
+            commandParameters.CustomerEmail,
+            commandParameters.CustomerPassword);
+}
+
+export function ConsoleParametersCommandDatabaseDefaultUsersModel(
+    DeveloperEmail,
+    DeveloperPassword,
+    CustomerEmail,
+    CustomerPassword
+) {
+    this.DeveloperEmail    = iif(DeveloperEmail, DeveloperEmail, '');
+    this.DeveloperPassword = iif(DeveloperPassword, DeveloperPassword,'');
+    this.CustomerEmail     = iif(CustomerEmail, CustomerEmail, '');
+    this.CustomerPassword  = iif(CustomerPassword, CustomerPassword,'');
+}
+
+export function commandDatabaseDefaultUsers(commandParameters,success,error) {
+
+    axios
+        .post(accountControllerURL +'/console/commanddatabasedefaultusers',new ConsoleCommandDatabaseDefaultUsersModel(commandParameters))
+        .then(function (result) {
+            if (typeof success === 'function') {
+                try {
+                    let isSucceeded = result.data;
+                    success(isSucceeded);
+                }
+                catch (e){
+                    console.log("AccountController.js function commandDatabaseDefaultUsersModel");
+                    console.log(e);
+                }
+            }
+        })
+        .catch(function (e) {
+            if (typeof error === 'function')
+                try {
+                    error(e);
+                }
+                catch (e) {
+                }
+        })
+
+}
