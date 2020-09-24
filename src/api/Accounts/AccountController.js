@@ -1,6 +1,5 @@
 import axios from "axios"
 
-// const filterServiceURI = 'http://localhost:60000/api/Account';
 const accountControllerURL = process.env.VUE_APP_ACCOUNT_CONTROLLER_URL;
 
 /*

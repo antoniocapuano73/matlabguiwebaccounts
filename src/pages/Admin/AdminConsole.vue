@@ -5,7 +5,7 @@
         category
 -->
 <template>
-  <div>
+  <div class="content">
     <md-card>
       <md-card-header :data-background-color="theme">
         <h4 class="title"><b>{{title}}</b></h4>
