@@ -1,10 +1,10 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
-import Login                from "@/pages/Users/UserLogin.vue";
-import AdminConsole         from "@/pages/Admin/AdminConsole.vue";
-import AdminRolesManagement from "@/pages/Admin/AdminRolesManagement.vue";
-import CompaniesManagement  from "@/pages/Companies/CompaniesManagement.vue";
-import UsersManagement      from "@/pages/Users/UsersManagement.vue";
+import Login                from "@/pages/Users/PageUserLogin.vue";
+import UsersManagement      from "@/pages/Users/PageUsersManagement.vue";
+import AdminConsole         from "@/pages/Admin/PageAdminConsole.vue";
+import AdminRolesManagement from "@/pages/Admin/PageAdminRolesManagement.vue";
+import CompaniesManagement  from "@/pages/Companies/PageCompaniesManagement.vue";
 
 const routes = [
   {

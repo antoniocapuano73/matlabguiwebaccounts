@@ -3,6 +3,7 @@
         title
         category
         item
+        enabled
 -->
 <template>
   <form>
@@ -21,7 +22,7 @@
                     <md-table-row slot="md-table-row" slot-scope="{ item }">
 
                         <md-table-cell md-label="">
-                            <md-input type="checkbox" v-model="item.Active"> </md-input>
+                            <md-input type="checkbox" v-model="item.Active" :disabled="!enabled"> </md-input>
                         </md-table-cell>
 
                         <md-table-cell md-label="User Role List">{{ item.Name }}</md-table-cell>
@@ -38,7 +39,7 @@
 
                 <md-field>
                     <label>Email</label>
-                    <md-input v-model="m_item.Email"></md-input>
+                    <md-input v-model="m_item.Email" :disabled="!enabled"></md-input>
                 </md-field>
             </div>
 
@@ -56,7 +57,7 @@ import {
 } from "@/api/Accounts/AccountController.js"
 
 export default {
-  name: "UserLoginInfo",
+  name: "PageUserLoginInfo",
   data: function() {
     return {
       m_item: null,
@@ -79,6 +80,10 @@ export default {
     item: {
       type: Object,
       default: null,
+    },
+    enabled: {
+      type: Boolean,
+      default: true
     },
 
   },

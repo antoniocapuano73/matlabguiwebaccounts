@@ -7,22 +7,27 @@
       :sidebar-background-image="sidebarBackgroundImage"
     >
       <mobile-menu slot="content"></mobile-menu>
+
       <sidebar-link to="/account/login">
         <md-icon>person</md-icon>
         <p>Login</p>
       </sidebar-link>
+
       <sidebar-link to="/account/console">
         <md-icon>admin_panel_settings</md-icon>
         <p>Admin Console</p>
       </sidebar-link>
+
       <sidebar-link to="/account/roles">
         <md-icon>admin_panel_settings</md-icon>
         <p>Admin Roles</p>
       </sidebar-link>
+
       <sidebar-link to="/account/companies">
         <md-icon>group</md-icon>
         <p>Companies</p>
       </sidebar-link>
+
       <sidebar-link to="/account/users">
         <md-icon>person</md-icon>
         <p>User Profile</p>
@@ -43,6 +48,7 @@
 
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
+
   </div>
 </template>
 

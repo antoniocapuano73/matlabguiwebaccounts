@@ -74,7 +74,7 @@ import {
 import DialogMessage from "@/lib/components/Dialogs/DialogMessage.vue"
 
 export default {
-  name: "AdminConsole",
+  name: "PageAdminConsole",
   components: {
     DialogMessage,
   },

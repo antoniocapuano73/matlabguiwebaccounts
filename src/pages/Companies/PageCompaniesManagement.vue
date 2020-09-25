@@ -40,7 +40,7 @@ export default {
 
   */
 
-  name: "CompaniesManagement",
+  name: "PageCompaniesManagement",
   components: {
     TableManagement,
   },

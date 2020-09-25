@@ -83,8 +83,8 @@ import {
   getCompanyList,
   } from "@/api/Accounts/AccountController.js"
 
-import UserLoginInfo from "@/pages/Users/UserLoginInfo.vue";
-import UserRegister from "@/pages/Users/UserRegister.vue";
+import UserLoginInfo from "@/pages/Users/PageUserLoginInfo.vue";
+import UserRegister from "@/pages/Users/PageUserRegister.vue";
 import TableManagement from "@/lib/components/Tables/TableManagement.vue";
 import {
   Datasource,
@@ -105,7 +105,7 @@ export default {
 
   */
 
-  name: "UsersManagement",
+  name: "PageUsersManagement",
   components: {
     TableManagement,
     UserLoginInfo,

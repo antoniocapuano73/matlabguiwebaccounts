@@ -415,27 +415,37 @@ export function updateCompany(item,successFunction,errorFunction) {
 /*
     USER SECTION
 
-    SELECT TOP 1000 [Id]
-        ,[HasTemporaryPassword]
-        ,[Email]
-        ,[EmailConfirmed]
-        ,[PasswordHash]
-        ,[SecurityStamp]
-        ,[PhoneNumber]
-        ,[PhoneNumberConfirmed]
-        ,[TwoFactorEnabled]
-        ,[LockoutEndDateUtc]
-        ,[LockoutEnabled]
-        ,[AccessFailedCount]
-        ,[UserName]
-        ,[Company_Id]
-        ,[Settings_Id]
-        ,[FirstName]
-        ,[LastName]
-        ,[Note]
-        ,[Image]
-        ,[Role]
-    FROM [Users].[dbo].[AspNetUsers]
+    Public Class UserModel
+
+        Public Sub New()
+            ' alloc memory for collection Roles
+            For i As Integer = 0 To (VUE_APP_ROLES_COUNT - 1)
+                Roles(i) = New AdminRoleUserModel
+            Next
+        End Sub
+
+        Public Id As String
+
+        ' IdentityUser
+        Public Username As String
+        Public Email As String
+        Public PhoneNumber As String
+
+        ' ApplicationUser
+        Public FirstName As String
+        Public LastName As String
+        Public Note As String
+        Public Image As String
+
+        ' Temporary Password
+        Public HasTemporaryPassword As Boolean
+
+        ' Collection
+        Public Roles(VUE_APP_ROLES_COUNT - 1) As AdminRoleUserModel
+
+        ' additional data
+        Public CompanyId As Integer
+    End Class
 
 */
 
@@ -469,6 +479,7 @@ export function UserModel(Id,Email) {
 /*
     Public Class UserRegisterModel
         Public Email As String
+        Public Username As String
 
         ' **********************************
         ' IMPORTANTE
@@ -848,7 +859,7 @@ export function commandDatabaseDefaultUsers(commandParameters,success,error) {
                     success(isSucceeded);
                 }
                 catch (e){
-                    console.log("AccountController.js function commandDatabaseDefaultUsersModel");
+                    console.log("AccountController.js function commandDatabaseDefaultUsers");
                     console.log(e);
                 }
             }

@@ -31,7 +31,7 @@ import {
   } from "@/lib/components/Tables/TableUtility.js"
 
 export default {
-  name: "AdminRolesManagement",
+  name: "PageAdminRolesManagement",
   components: {
     TableManagement,
   },

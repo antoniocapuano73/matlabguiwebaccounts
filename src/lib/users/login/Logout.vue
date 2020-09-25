@@ -2,8 +2,8 @@
     props:
         title
         category
-        onLoginSuccess
-        onLoginFailure
+        onLogoutSuccess
+        onLogoutFailure
 
     Source code:
         https://github.com/cornflourblue/vue-vuex-registration-login-example
@@ -18,53 +18,27 @@
             </md-card-header>
 
             <md-card-content>
-                <form @submit.prevent="handleSubmit">
-
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-100 text-left">
-                            <md-field>
-                                <label for="username">Email</label>
-                                <md-input type="text" v-model="username" name="username" :class="{ 'is-invalid': submitted && !username }" />
-                                <div v-show="submitted && !username" class="invalid-feedback">Username is required</div>
-                            </md-field>
-
-                            <md-field>
-                                <label htmlFor="password">Password</label>
-                                <md-input type="password" v-model="password" name="password" :class="{ 'is-invalid': submitted && !password }" />
-                                <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
-                            </md-field>
-                        </div>
-
-                        <div class="md-layout-item md-size-100 text-right">
-                            <div class="form-group">
-                                <md-button :class="themeButtonColor()" @click="handleSubmit()">Login</md-button>
-
-                                <!--
-                                <button :disabled="status.loggingIn">Login</button>
-                                <img v-show="status.loggingIn" />
-                                <router-link to="/register" class="btn btn-link">Register</router-link>
-                                -->
-                            </div>
-                        </div>
-                    
-                    </div>
-                </form>
+                <div class="md-layout">
+                    <div class="md-layout-item md-size-100 text-right">
+                        <md-button :class="themeButtonColor()" @click="DoLogout()">Logout</md-button>
+                    </div> 
+                
+                </div>
             </md-card-content>
+
         </md-card>
         
     </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import {  mapState, mapActions } from 'vuex'
 
 export default {
-    name: "Login",
+    name: "Logout",
     data () {
         return {
-            username: '',
-            password: '',
-            submitted: false
+            debug: false,
         }
     },
     props: {
@@ -74,17 +48,17 @@ export default {
         },
         title: {
             type: String,
-            default: "Login"
+            default: "Logout"
         },
         category: {
             type: String,
-            default: "Authentication form"
+            default: "Press button to confirm logout"
         },
-        onLoginSuccess: {
+        onLogoutSuccess: {
             type: Function,
             default: null,
         },
-        onLoginFailure: {
+        onLogoutFailure: {
             type: Function,
             default: null,
         },
@@ -100,49 +74,44 @@ export default {
     methods: {
         ...mapActions('account', ['login', 'logout']),
         /*
-            LOGIN SECTION
+            LOGOUT SECTION
         */
-        handleSubmit (e) {
+        DoLogout: function() {
             let that = this;
 
-            that.submitted = true;
-            const { username, password } = that;
-
-            let success = function (user) {
-                that.raise_onLoginSuccess(user);
+            let success = function () {
+                that.raise_onLogoutSuccess();
             };
 
              let failure = function (error) {
-                that.raise_onLoginFailure(error);
+                that.raise_onLogoutFailure(error);
             };
 
-            if (username && password) {
-                that.login({username, password, success, failure})
-            }
+            that.logout({success, failure});
         },
         /*
             COMPONENT EVENTS SECTION
         */
-        raise_onLoginSuccess: function(user) {
+        raise_onLogoutSuccess: function() {
             let that = this;
 
             try {
-                if (that.onLoginSuccess) {
-                    if (typeof that.onLoginSuccess === 'function')
-                        that.onLoginSuccess(user);
+                if (that.onLogoutSuccess) {
+                    if (typeof that.onLogoutSuccess === 'function')
+                        that.onLogoutSuccess();
                 }
             }
             catch(e) {
 
             }
         },
-        raise_onLoginFailure: function(error) {
+        raise_onLogoutFailure: function(error) {
             let that = this;
 
             try {
-                if (that.onLoginFailure) {
-                    if (typeof that.onLoginFailure === 'function')
-                        that.onLoginFailure(error);
+                if (that.onLogoutFailure) {
+                    if (typeof that.onLogoutFailure === 'function')
+                        that.onLogoutFailure(error);
                 }
             }
             catch(e) {
