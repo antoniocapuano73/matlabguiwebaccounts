@@ -18,6 +18,7 @@
       title="Profile User"
       category="User Info"
       :item="userInfo"
+      :fields="fields()"
       :enabled="false">
     </UserLoginInfo>
 
@@ -34,6 +35,11 @@
 import Login from  "@/lib/users/login/Login.vue"
 import Logout from "@/lib/users/login/Logout.vue"
 import UserLoginInfo from "@/pages/Users/PageUserLoginInfo.vue";
+
+import {
+  TableField,
+  TableFields,
+  } from "@/lib/components/Tables/TableUtility.js"
 
 import { mapGetters } from 'vuex'
 
@@ -55,12 +61,26 @@ export default {
   mounted: function() {
     let that = this;
 
-
   },
   computed: {
     ...mapGetters('account', ['isUserLoggedIn','isUserLoggedOut','userInfo']),
+
   },
   methods: {
+    /*
+      HTML SECTION
+    */
+    fields: function() {
+      let selectedFields = 
+        new TableFields(
+            new TableField("FirstName","First Name"),
+            new TableField("LastName","Last Name"),
+            new TableField("PhoneNumber","Phone Number"),
+            new TableField("Note")
+        );
+
+      return selectedFields;
+    },
     /*
       COMPONENT EVENTS SECTION
     */

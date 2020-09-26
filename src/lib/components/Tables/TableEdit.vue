@@ -69,10 +69,13 @@ import {
 
 import {
   Datasource,
-  key,text,type,
+  getFieldKey,
+  getFieldText,
+  getFieldType,
   TableField,
   TableFields,
   IsTableFields,
+  getSelectedFields,
   } from "@/lib/components/Tables/TableUtility.js"
 
 export default {
@@ -133,46 +136,7 @@ export default {
     */
     __FIELDS__: function() {
       let that = this;
-      let ret  = null;
-
-      let obj    = that.m_item;
-      let fields = that.fields;
-      
-      if (obj) {
-        let FIELDS = null;
-
-        if (!fields) {
-          FIELDS = Object.getOwnPropertyNames(obj);
-        } else {
-
-          if (IsTableFields(fields)) {
-            FIELDS = fields.items;
-          }
-          else
-            FIELDS = fields;
-        }
-
-        /*
-          Filter on existing fields
-        */
-        for (var field of FIELDS) {
-          let propertyName = that.fieldKey(field);
-
-            if (obj.hasOwnProperty(propertyName)) {
-              if (!ret)
-                ret = [];
-
-              ret.push(field);
-            }
-        }
-
-
-      }
-
-      //console.log("__FIELDS__");
-      //console.log(ret);
-      
-      return ret;
+      return getSelectedFields(that.m_item,that.fields);
     },
   },
   methods: {
@@ -263,13 +227,13 @@ export default {
       HTML TABLE SECTION
     */
     fieldKey: function(field) {
-      return key(field);
+      return getFieldKey(field);
     },
     fieldText: function(field) {
-      return text(field);
+      return getFieldText(field);
     },
     fieldType: function(field) {
-      return type(field);
+      return getFieldType(field);
     },
     /*
       DATABASE CONTEXT

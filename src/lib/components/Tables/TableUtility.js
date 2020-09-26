@@ -104,6 +104,7 @@ export function TableFields() {
 
     this.items = [];
 
+    /*
     this.keys = function() {
         let ret = [];
 
@@ -149,7 +150,8 @@ export function TableFields() {
 
         return ret;
     }
-
+    */
+   
     try {
         for (let i = 0; i < arguments.length; i++) {
             let field = arguments[i];
@@ -172,7 +174,7 @@ export function IsTableFields(obj) {
     return (obj.constructor.name === "TableFields");
 }
 
-export function key(obj) {
+export function getFieldKey(obj) {
     let ret = null;
 
     if (IsTableField(obj)) {
@@ -184,7 +186,7 @@ export function key(obj) {
     return ret;
 }
 
-export function text(obj) {
+export function getFieldText(obj) {
     let ret = null;
 
     if (IsTableField(obj)) {
@@ -196,7 +198,7 @@ export function text(obj) {
     return ret;
 }
 
-export function type(obj) {
+export function getFieldType(obj) {
     let ret = null;
 
     if (IsTableField(obj)) {
@@ -204,6 +206,54 @@ export function type(obj) {
     } else {
         ret = "text";
     }
+
+    return ret;
+}
+export function getSelectedFields(obj,fields) {
+    /*
+        HTML TABLE SECTION
+    */
+    let ret  = null;
+
+    try {
+        if (obj) {
+            let FIELDS = null;
+    
+            if (!fields) {
+                fields = Object.getOwnPropertyNames(obj);
+            } else {
+    
+            if (IsTableFields(fields)) {
+                FIELDS = fields.items;
+            }
+            else
+                FIELDS = fields;
+            }
+    
+            /*
+            Filter on existing fields
+            */
+            for (var field of FIELDS) {
+                let propertyName = getFieldKey(field);
+    
+                if (obj.hasOwnProperty(propertyName)) {
+                    if (!ret)
+                        ret = [];
+    
+                ret.push(field);
+                }
+            }
+    
+    
+        }
+
+    } catch (e) {
+        console.log("TableUtility.getSelectedFields error");
+        console.log(e);
+    }
+
+    if (!ret)
+        ret = [];
 
     return ret;
 }

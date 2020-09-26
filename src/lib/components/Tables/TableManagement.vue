@@ -100,7 +100,11 @@ import {
 import TableEdit from "@/lib/components/Tables/TableEdit.vue";
 import {
   Datasource,
-  key,text,TableField,TableFields,
+  getFieldKey,
+  getFieldText,
+  getFieldType,
+  TableField,
+  TableFields,
   } from "@/lib/components/Tables/TableUtility.js"
 
 import DialogConfirm from "@/lib/components/Dialogs/DialogConfirm.vue"
@@ -301,10 +305,13 @@ export default {
       HTML TABLE SECTION
     */
     fieldKey: function(field) {
-      return key(field);
+      return getFieldKey(field);
     },
     fieldText: function(field) {
-      return text(field);
+      return getFieldText(field);
+    },
+    fieldType: function(field) {
+      return getFieldType(field);
     },
     /*
       EVENTS SECTION

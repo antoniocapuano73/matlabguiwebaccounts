@@ -4,6 +4,7 @@
         category
         item
         enabled
+        fields
 -->
 <template>
   <form>
@@ -43,6 +44,13 @@
                 </md-field>
             </div>
 
+          <div class="md-layout-item md-small-size-100 md-size-50" v-for="(item,index) in __FIELDS__" :key="index">
+            <md-field>
+              <label>{{fieldText(item)}}</label>
+              <md-input :type="fieldType(item)" v-model="m_item[fieldKey(item)]" :disabled="!enabled"></md-input>
+            </md-field>
+          </div>
+
         </div>
 
       </md-card-content>
@@ -55,6 +63,19 @@
 import {
   getUserRoleList,
 } from "@/api/Accounts/AccountController.js"
+
+import {
+  IsFunction,
+  } from "@/lib/utility/Utility.js"
+
+import {
+  TableField,
+  TableFields,
+  getFieldKey,
+  getFieldText,
+  getFieldType,
+  getSelectedFields,
+  } from "@/lib/components/Tables/TableUtility.js"
 
 export default {
   name: "PageUserLoginInfo",
@@ -85,7 +106,10 @@ export default {
       type: Boolean,
       default: true
     },
-
+    fields: {
+      type: Object,
+      default: function() {return new TableFields()},
+    },
   },
   mounted: function() {
       let that = this;
@@ -98,6 +122,9 @@ export default {
 
   },
   computed: {
+    /*
+      CSS SECTION
+    */
     class_mdLayoutItem: function() {
       let that = this;
 
@@ -107,30 +134,51 @@ export default {
         return "md-layout-item md-size-100 text-left";
       }
     },
+    /*
+      HTML TABLE SECTION
+    */
+    __FIELDS__: function() {
+      let that = this;
+      let selectedFields = getSelectedFields(that.m_item,that.fields);
+
+      return selectedFields;
+    },
   },
   methods: {
-      updateRoleList: function() {
-            let that = this;
+    updateRoleList: function() {
+          let that = this;
 
-            if (that.m_item) {
-                /*
-                    ADMINROLEUSER SECTION
+          if (that.m_item) {
+              /*
+                  ADMINROLEUSER SECTION
 
-                    Public Class AdminRoleUserModel
-                        Public Id As String
-                        Public Name As String
-                        Public Active As Boolean
-                    End Class
-                */
+                  Public Class AdminRoleUserModel
+                      Public Id As String
+                      Public Name As String
+                      Public Active As Boolean
+                  End Class
+              */
 
-                getUserRoleList(that.m_item,function(list) {
-                    that.tableRoleList = list;
+              getUserRoleList(that.m_item,function(list) {
+                  that.tableRoleList = list;
 
-                    // add runtime property
-                    that.m_item.Roles = list;
-                });   
-            }       
-      },
+                  // add runtime property
+                  that.m_item.Roles = list;
+              });   
+          }       
+    },
+    /*
+      HTML TABLE SECTION
+    */
+    fieldKey: function(field) {
+      return getFieldKey(field);
+    },
+    fieldText: function(field) {
+      return getFieldText(field);
+    },
+    fieldType: function(field) {
+      return getFieldType(field);
+    },
   },
   watch: { 
       item: function(nv) {
